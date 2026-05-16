@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us - Ceylon Mirissa')
-@section('description', 'Get in touch with Ceylon Mirissa for your Sri Lankan adventure. Contact us for tour bookings, inquiries, or to plan your perfect vacation in paradise.')
+@section('title', 'Contact Us - Mirissawaves')
+@section('description', 'Get in touch with Mirissawaves for your Sri Lankan adventure. Contact us for tour bookings, inquiries, or to plan your perfect vacation in paradise.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-[50vh] flex items-center justify-center overflow-hidden pt-20">
+<section class="relative page-hero flex items-center justify-center overflow-hidden min-h-[38vh] sm:min-h-[45vh]">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
         <div class="absolute inset-0 bg-gradient-to-r from-purple-900/70 to-indigo-900/70"></div>
     </div>
@@ -30,7 +30,7 @@
 
 <!-- Contact Information Section -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -50,7 +50,7 @@
                         </svg>
                     </div>
                     <h3 class="text-sm font-semibold text-gray-900 mb-3">Call Us</h3>
-                    <p class="text-gray-600 mb-2 text-sm">+94 77 123 4567</p>
+                    <p class="text-gray-600 mb-2 text-sm">+94 77 552 3939</p>
                     <p class="text-gray-600 mb-2 text-sm">+94 11 234 5678</p>
                     <p class="text-xs text-gray-500">Mon - Fri: 8:00 AM - 6:00 PM</p>
                 </div>
@@ -63,8 +63,8 @@
                         </svg>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-3">Email Us</h3>
-                    <p class="text-gray-600 mb-2">info@ceylonmirissa.com</p>
-                    <p class="text-gray-600 mb-2">bookings@ceylonmirissa.com</p>
+                    <p class="text-gray-600 mb-2">info@mirissawaves.com</p>
+                    <p class="text-gray-600 mb-2">bookings@mirissawaves.com</p>
                     <p class="text-sm text-gray-500">We reply within 24 hours</p>
                 </div>
                 
@@ -88,7 +88,7 @@
 
 <!-- Contact Form Section -->
 <section id="contact-form" class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -102,15 +102,22 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Contact Form -->
                 <div class="bg-gray-50 rounded-xl p-6">
-                    <form class="space-y-4">
+                    @if(session('success'))
+                        <div class="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 text-sm">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-800 text-sm">{{ session('error') }}</div>
+                    @endif
+                    <form method="POST" action="{{ route('contact.store') }}" class="space-y-4">
+                        @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
                                 <label for="firstName" class="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                                <input type="text" id="firstName" name="firstName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm">
+                                <input type="text" id="first_name" name="first_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm">
                             </div>
                             <div>
                                 <label for="lastName" class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm">
+                                <input type="text" id="last_name" name="last_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 text-sm">
                             </div>
                         </div>
                         
@@ -126,7 +133,7 @@
                         
                         <div>
                             <label for="tourInterest" class="block text-sm font-semibold text-gray-700 mb-2">Tour Interest</label>
-                            <select id="tourInterest" name="tourInterest" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                            <select id="tour_interest" name="tour_interest" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                                 <option value="">Select a tour type</option>
                                 <option value="cultural">Cultural Heritage Tours</option>
                                 <option value="adventure">Adventure & Hiking</option>
@@ -139,12 +146,12 @@
                         
                         <div>
                             <label for="travelDates" class="block text-sm font-semibold text-gray-700 mb-2">Preferred Travel Dates</label>
-                            <input type="text" id="travelDates" name="travelDates" placeholder="e.g., March 15-25, 2024" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                            <input type="text" id="travel_dates" name="travel_dates" placeholder="e.g., March 15-25, 2024" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                         </div>
                         
                         <div>
                             <label for="groupSize" class="block text-sm font-semibold text-gray-700 mb-2">Group Size</label>
-                            <select id="groupSize" name="groupSize" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                            <select id="group_size" name="group_size" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                                 <option value="">Select group size</option>
                                 <option value="1">Solo Traveler</option>
                                 <option value="2">Couple</option>
@@ -156,7 +163,7 @@
                         
                         <div>
                             <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
-                            <textarea id="message" name="message" rows="5" placeholder="Tell us about your dream Sri Lankan adventure..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"></textarea>
+                            <textarea id="message" name="message" rows="5" required placeholder="Tell us about your dream Sri Lankan adventure..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none"></textarea>
                         </div>
                         
                         <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white py-4 rounded-lg font-semibold text-sm transition-all duration-300 transform hover:scale-105 shadow-lg">
@@ -242,7 +249,7 @@
 
 <!-- FAQ Section -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -345,7 +352,7 @@
 
 <!-- Call to Action Section -->
 <section class="py-12 bg-gradient-to-r from-blue-600 to-green-600">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto text-center text-white">
             <h2 class="text-3xl md:text-4xl font-bold playfair mb-4">
                 Ready to Start Your Adventure?
@@ -354,10 +361,10 @@
                 Don't wait! Contact us today and let's create the perfect Sri Lankan experience for you.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="tel:+94771234567" class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105">
-                    Call Now: +94 77 123 4567
+                <a href="tel:+94775523939" class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105">
+                    Call Now: +94 77 552 3939
                 </a>
-                <a href="mailto:info@ceylonmirissa.com" class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105">
+                <a href="mailto:info@mirissawaves.com" class="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105">
                     Email Us
                 </a>
             </div>

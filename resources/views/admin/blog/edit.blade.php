@@ -15,6 +15,8 @@
 @endsection
 
 @section('content')
+@include('admin.blog._ai-article-generator', ['geminiConfigured' => $geminiConfigured ?? false])
+
 <!-- Edit Form -->
 <form action="{{ route('admin.blog.update', $blog) }}" method="POST" enctype="multipart/form-data" class="space-y-8">
     @csrf
@@ -96,7 +98,7 @@
                             <div id="featured-image-preview" class="mb-4">
                                 @if($blog->media)
                                     <div class="relative w-full h-48">
-                                        <img src="{{ $blog->media->url }}" alt="{{ $blog->media->name }}" class="w-full h-full object-cover rounded-xl">
+                                        <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->media->name ?? 'Featured image'" placeholder="blog" class="w-full h-full object-cover rounded-xl" />
                                         <button type="button" onclick="removeSingleImage()" 
                                                 class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600">
                                             <i class="fas fa-times text-xs"></i>
@@ -105,7 +107,7 @@
                                     <p class="text-sm text-gray-600 mt-2">{{ $blog->media->name }}</p>
                                 @elseif($blog->featured_image)
                                     <div class="relative w-full h-48">
-                                        <img src="{{ asset('storage/' . $blog->featured_image) }}" alt="Current featured image" class="w-full h-full object-cover rounded-xl">
+                                        <x-placeholder-image :src="$blog->featured_image_url" alt="Current featured image" placeholder="blog" class="w-full h-full object-cover rounded-xl" />
                                         <button type="button" onclick="removeSingleImage()" 
                                                 class="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600">
                                             <i class="fas fa-times text-xs"></i>

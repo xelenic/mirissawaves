@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', isset($about->meta_title) ? $about->meta_title : 'About Us - Ceylon Mirissa')
-@section('description', isset($about->meta_description) ? $about->meta_description : 'Learn about Ceylon Mirissa, your trusted partner for authentic Sri Lankan travel experiences. Discover our story, mission, and commitment to showcasing the beauty of Sri Lanka.')
+@section('title', isset($about->meta_title) ? $about->meta_title : 'About Us - Mirissawaves')
+@section('description', isset($about->meta_description) ? $about->meta_description : 'Learn about Mirissawaves, your trusted partner for authentic Sri Lankan travel experiences. Discover our story, mission, and commitment to showcasing the beauty of Sri Lanka.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-[50vh] flex items-center justify-center overflow-hidden pt-20">
+<section class="relative page-hero flex items-center justify-center overflow-hidden min-h-[38vh] sm:min-h-[45vh]">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ $about->hero_image_url ?? asset('slider/default-about.jpg') }}');">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-green-900/70"></div>
     </div>
@@ -13,7 +13,7 @@
     <div class="relative z-10 text-center text-white px-4">
         <div class="max-w-4xl mx-auto">
             <h1 class="text-3xl md:text-4xl font-bold playfair mb-4 animate-fade-in">
-                {{ $about->title ?? 'About Ceylon Mirissa' }}
+                {{ $about->title ?? 'About Mirissawaves' }}
             </h1>
             <p class="text-lg md:text-xl mb-6 opacity-90 animate-fade-in-delay">
                 {{ $about->subtitle ?? 'Your trusted partner in discovering the authentic beauty of Sri Lanka' }}
@@ -29,14 +29,14 @@
 
 <!-- Our Story Section -->
 <section id="our-story" class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
                     Our Story
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    {{ $about->subtitle ?? 'Born from a deep love for Sri Lanka\'s rich heritage and natural beauty, Ceylon Mirissa has been creating unforgettable travel experiences since our founding.' }}
+                    {{ $about->subtitle ?? 'Born from a deep love for Sri Lanka\'s rich heritage and natural beauty, Mirissawaves has been creating unforgettable travel experiences since our founding.' }}
                 </p>
             </div>
             
@@ -44,7 +44,7 @@
                 <div class="space-y-4">
                     <h3 class="text-2xl font-bold text-gray-900 playfair">A Journey of Discovery</h3>
                     <div class="text-gray-600 leading-relaxed text-sm">
-                        {!! nl2br(e($about->content ?? 'Founded by passionate travelers who fell in love with Sri Lanka\'s diverse landscapes, ancient temples, and warm hospitality, Ceylon Mirissa began as a dream to share this paradise with the world. From the misty mountains of Ella to the golden beaches of Mirissa, from the ancient frescoes of Sigiriya to the sacred temples of Kandy, we curate experiences that showcase the very best of this incredible island nation.')) !!}
+                        {!! nl2br(e($about->content ?? 'Founded by passionate travelers who fell in love with Sri Lanka\'s diverse landscapes, ancient temples, and warm hospitality, Mirissawaves began as a dream to share this paradise with the world. From the misty mountains of Ella to the golden beaches of Mirissa, from the ancient frescoes of Sigiriya to the sacred temples of Kandy, we curate experiences that showcase the very best of this incredible island nation.')) !!}
                     </div>
                     @if(isset($about->features) && count($about->features) > 0)
                         <div class="flex items-center space-x-3">
@@ -92,7 +92,7 @@
 
 <!-- Mission & Values Section -->
 <section class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -175,83 +175,11 @@
     </div>
 </section>
 
-<!-- Team Section -->
-<section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
-                    Meet Our Team
-                </h2>
-                <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Our passionate team of local experts and travel enthusiasts are dedicated to making your Sri Lankan adventure unforgettable.
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                @if($about->team_members_with_images && count($about->team_members_with_images) > 0)
-                    @foreach($about->team_members_with_images as $member)
-                        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                            @if($member['image_url'])
-                                <img src="{{ $member['image_url'] }}" alt="{{ $member['name'] }}" class="w-full h-48 object-cover">
-                            @else
-                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-user text-gray-400 text-4xl"></i>
-                                </div>
-                            @endif
-                            <div class="p-4">
-                                <h3 class="text-lg font-bold text-gray-900 playfair mb-2">{{ $member['name'] ?? 'Team Member' }}</h3>
-                                <p class="text-blue-600 font-semibold mb-3 text-sm">{{ $member['position'] ?? 'Position' }}</p>
-                                <p class="text-gray-600 text-sm leading-relaxed">
-                                    {{ $member['description'] ?? 'Team member description' }}
-                                </p>
-                            </div>
-                        </div>
-                    @endforeach
-                @else
-                    <!-- Fallback Team Members -->
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team member" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-lg font-bold text-gray-900 playfair mb-2">Rajesh Perera</h3>
-                            <p class="text-blue-600 font-semibold mb-3 text-sm">Founder & CEO</p>
-                            <p class="text-gray-600 text-sm leading-relaxed">
-                                A native of Kandy with over 15 years of experience in tourism, Rajesh founded Ceylon Mirissa to share his love for Sri Lanka's cultural heritage.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team member" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-xl font-bold text-gray-900 playfair mb-2">Priya Fernando</h3>
-                            <p class="text-green-600 font-semibold mb-3">Head of Operations</p>
-                            <p class="text-gray-600 text-sm leading-relaxed">
-                                Born in Mirissa, Priya ensures every detail of your journey is perfect. Her expertise in wildlife and marine conservation adds depth to our eco-tours.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Team member" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <h3 class="text-xl font-bold text-gray-900 playfair mb-2">Kumar Silva</h3>
-                            <p class="text-purple-600 font-semibold mb-3">Lead Guide</p>
-                            <p class="text-gray-600 text-sm leading-relaxed">
-                                With extensive knowledge of Sri Lanka's ancient sites and hiking trails, Kumar brings history and adventure to life for our guests.
-                            </p>
-                        </div>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Vision & Mission Section -->
 @if($about && ($about->vision || $about->mission || ($about->values && count($about->values) > 0)))
 <section class="py-16 bg-gradient-to-br from-blue-50 to-indigo-100">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -323,11 +251,11 @@
 
 <!-- Why Choose Us Section -->
 <section class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
-                    Why Choose Ceylon Mirissa?
+                    Why Choose Mirissawaves?
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     We go beyond typical tourism to create meaningful, authentic experiences that connect you with the heart of Sri Lanka.
@@ -419,13 +347,13 @@
 
 <!-- Call to Action Section -->
 <section class="py-12 bg-gradient-to-r from-blue-600 to-green-600">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto text-center text-white">
             <h2 class="text-3xl md:text-4xl font-bold playfair mb-4">
                 Ready to Discover Sri Lanka?
             </h2>
             <p class="text-lg mb-6 opacity-90">
-                Join thousands of satisfied travelers who have experienced the magic of Sri Lanka with Ceylon Mirissa.
+                Join thousands of satisfied travelers who have experienced the magic of Sri Lanka with Mirissawaves.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
                 <a href="{{ route('contact') }}" class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105">

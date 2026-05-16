@@ -13,10 +13,10 @@
 }
 </style>
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-blue-600 to-green-600 text-white py-16">
-    <div class="container mx-auto px-6">
+<section class="page-hero bg-gradient-to-r from-blue-600 to-green-600 text-white py-10 sm:py-16">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 playfair">Search Results</h1>
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 playfair">Search Results</h1>
             <p class="text-xl mb-6">Results for: <span class="font-semibold">"{{ $query }}"</span></p>
             <p class="text-lg opacity-90">{{ $totalResults }} results found</p>
         </div>
@@ -25,7 +25,7 @@
 
 <!-- Search Results -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         
         <!-- Categories Section -->
         @if($packageCategories->count() > 0 || $blogCategories->count() > 0)
@@ -137,7 +137,7 @@
                 @foreach($blogs as $blog)
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-green-200 group">
                     <div class="aspect-video bg-gray-200 overflow-hidden relative">
-                        <img src="{{ $blog->featured_image_url ?? asset('slider/default-blog.jpg') }}" alt="{{ $blog->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->title" placeholder="blog" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-4">

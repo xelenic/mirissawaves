@@ -73,26 +73,25 @@ class RolePermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(
+                ['name' => $permission, 'guard_name' => 'web']
+            );
         }
 
-        // Create roles
-        $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
+        $userRole = Role::firstOrCreate(['name' => 'user', 'guard_name' => 'web']);
 
-        // Assign all permissions to admin
-        $adminRole->givePermissionTo(Permission::all());
+        $adminRole->syncPermissions(Permission::all());
 
-        // Assign limited permissions to user
-        $userRole->givePermissionTo([
+        $userRole->syncPermissions([
             'view packages',
             'create bookings',
             'view blogs',
             'create reviews',
         ]);
 
-        $this->command->info('Roles and permissions created successfully!');
-        $this->command->info('Admin role has all permissions');
-        $this->command->info('User role has limited permissions');
+        $this->command->info('Roles and permissions ensured successfully!');
+        $this->command->info('Admin role has all permissions.');
+        $this->command->info('User role has limited permissions.');
     }
 }

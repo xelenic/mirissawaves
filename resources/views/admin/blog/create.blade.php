@@ -5,6 +5,8 @@
 @section('page-description', 'Share your thoughts and experiences with the world')
 
 @section('content')
+@include('admin.blog._ai-article-generator', ['geminiConfigured' => $geminiConfigured ?? false])
+
 <!-- Create Form -->
 <form action="{{ route('admin.blog.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
     @csrf

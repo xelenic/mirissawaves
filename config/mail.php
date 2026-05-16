@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', env('RESEND_KEY') ? 'resend' : 'log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -114,5 +114,17 @@ return [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin notification address
+    |--------------------------------------------------------------------------
+    |
+    | Booking alerts and contact form submissions are sent here. Falls back to
+    | the contact_email setting when not set in the environment.
+    |
+    */
+
+    'admin_address' => env('MAIL_ADMIN_ADDRESS'),
 
 ];

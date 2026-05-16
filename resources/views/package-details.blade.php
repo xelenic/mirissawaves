@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $package->title . ' - Ceylon Mirissa')
+@section('title', $package->title . ' - Mirissawaves')
 @section('description', Str::limit($package->description, 160))
 
 @push('head')
@@ -11,7 +11,7 @@
 
 @section('content')
 <!-- Hero Section with Image Slider -->
-<section class="relative h-screen overflow-hidden">
+<section class="relative detail-hero overflow-hidden">
     <div class="swiper package-swiper h-full">
         <div class="swiper-wrapper">
             <!-- Main Package Image -->
@@ -70,9 +70,9 @@
     </div>
     
     <!-- Package Info Overlay -->
-    <div class="absolute bottom-0 left-0 right-0 z-10 p-8">
+    <div class="detail-hero-card absolute bottom-0 left-0 right-0 z-10 p-4 sm:p-8">
         <div class="max-w-6xl mx-auto">
-            <div class="bg-white/95 backdrop-blur-lg rounded-2xl p-6 shadow-2xl">
+            <div class="bg-white/95 backdrop-blur-lg rounded-2xl p-4 sm:p-6 shadow-2xl">
                 <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
                     <div class="flex-1">
                         <div class="flex items-center gap-4 mb-4">
@@ -87,13 +87,13 @@
                                 <span class="text-sm ml-1">({{ $package->reviews_count }} reviews)</span>
                             </div>
                         </div>
-                        <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 playfair mb-4">
+                        <h1 class="text-2xl sm:text-4xl lg:text-5xl font-bold text-gray-900 playfair mb-4">
                             {{ $package->title }}
                         </h1>
                         <p class="text-lg text-gray-600 mb-4">
                             {{ $package->description }}
                         </p>
-                        <div class="flex items-center gap-6 text-gray-600">
+                        <div class="flex flex-wrap items-center gap-4 sm:gap-6 text-gray-600 detail-meta">
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -123,7 +123,7 @@
                             {{ $package->formatted_original_price }}
                         </div>
                         @endif
-                        <button onclick="openBookingModal()" class="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        <button onclick="openBookingModal()" class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base sm:text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                             Book This Package
                         </button>
                     </div>
@@ -135,7 +135,7 @@
 
 <!-- Package Details Section -->
 <section class="py-20 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <!-- Main Content -->
@@ -265,7 +265,7 @@
 <!-- Related Packages -->
 @if($relatedPackages->count() > 0)
 <section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-gray-900 playfair mb-4">Related Packages</h2>
@@ -509,17 +509,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Booking Modal Functions
 function openBookingModal() {
     document.getElementById('bookingModal').classList.remove('hidden');
-    // Reset form state when opening modal
     resetFormValidation();
-    
-    // Test error display (remove this after testing)
-    setTimeout(() => {
-        console.log('Testing error display...');
-        showFormErrors({
-            'email': ['Test email error'],
-            'full_name': ['Test name error']
-        });
-    }, 1000);
 }
 
 function closeBookingModal() {

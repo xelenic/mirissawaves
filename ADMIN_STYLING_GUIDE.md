@@ -1,4 +1,4 @@
-# Admin Panel Styling Guide - Ceylon Mirissa
+# Admin Panel Styling Guide - Mirissawaves
 
 ## 📍 **Where to Find Admin Styles**
 

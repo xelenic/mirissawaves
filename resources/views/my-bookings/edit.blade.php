@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Booking - Ceylon Mirissa')
+@section('title', 'Edit Booking - Mirissawaves')
 @section('description', 'Update your tour booking details.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-[40vh] flex items-center justify-center overflow-hidden pt-20">
+<section class="relative page-hero flex items-center justify-center overflow-hidden min-h-[32vh] sm:min-h-[38vh]">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ $booking->package->image_url }}');">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-green-900/70"></div>
     </div>
@@ -25,7 +25,7 @@
 
 <!-- Edit Booking Form Section -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto">
             <div class="bg-white rounded-xl shadow-md overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200">

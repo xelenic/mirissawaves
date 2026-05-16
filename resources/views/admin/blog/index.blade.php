@@ -107,7 +107,7 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
                                         <div class="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                                            <img src="{{ $blog->featured_image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
+                                            <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->title" placeholder="blog" class="w-full h-full object-cover" />
                                         </div>
                                         <div>
                                             <h3 class="text-sm font-semibold text-gray-900 mb-1">{{ Str::limit($blog->title, 50) }}</h3>

@@ -1,9 +1,19 @@
 @extends('layouts.app')
 
-@section('title', 'Payment Successful - Ceylon Mirissa')
+@section('title', 'Payment Successful - Mirissawaves')
+
+@push('styles')
+<style>
+    @media print {
+        header, footer, nav, .no-print { display: none !important; }
+        body { background: #fff !important; }
+        #booking-success-print { box-shadow: none !important; }
+    }
+</style>
+@endpush
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-12">
+<div class="payhere-page min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Success Message -->
         <div class="text-center mb-8">
@@ -12,11 +22,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 playfair mb-4">Payment Successful!</h1>
+            <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 playfair mb-4">Payment Successful!</h1>
             <p class="text-lg text-gray-600">Your booking has been confirmed and payment processed successfully.</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div id="booking-success-print" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Booking Details -->
             <div class="bg-white rounded-2xl shadow-xl p-6">
                 <h2 class="text-2xl font-bold text-gray-900 playfair mb-6">Booking Confirmation</h2>
@@ -40,16 +50,28 @@
                             <p class="text-gray-900 font-mono">#{{ $booking->id }}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Package</label>
-                            <p class="text-gray-900">{{ $booking->package->title }}</p>
+                            <label class="block text-sm font-medium text-gray-700">{{ $booking->package ? 'Package' : ($booking->vehicle ? 'Vehicle & Route' : 'Booking') }}</label>
+                            <p class="text-gray-900">
+                                @if($booking->package)
+                                    {{ $booking->package->title }}
+                                @elseif($booking->vehicle)
+                                    {{ $booking->vehicle->name }}
+                                    @if($booking->pickupLocation && $booking->destinationLocation)
+                                        <span class="block text-sm text-gray-600 mt-1">{{ $booking->pickupLocation->name }} → {{ $booking->destinationLocation->name }}</span>
+                                    @endif
+                                @else
+                                    Booking #{{ $booking->id }}
+                                @endif
+                            </p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Travel Date</label>
-                            <p class="text-gray-900">{{ $booking->travel_date->format('M d, Y') }}</p>
+                            <p class="text-gray-900">{{ $booking->travel_date?->format('M d, Y') ?? 'N/A' }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Travelers</label>
-                            <p class="text-gray-900">{{ $booking->travelers }} {{ $booking->travelers == 1 ? 'Person' : 'People' }}</p>
+                            @php $guestCount = $booking->passengers ?? $booking->travelers ?? 1; @endphp
+                            <p class="text-gray-900">{{ $guestCount }} {{ $guestCount == 1 ? 'Person' : 'People' }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Total Amount</label>
@@ -111,16 +133,25 @@
                 <div class="mt-6 bg-gray-50 rounded-lg p-4">
                     <h3 class="font-semibold text-gray-900 mb-2">Need Help?</h3>
                     <div class="space-y-1 text-sm text-gray-600">
-                        <p>📧 Email: info@ceylonmirissa.com</p>
-                        <p>📞 Phone: +94 77 123 4567</p>
-                        <p>💬 WhatsApp: +94 77 123 4567</p>
+                        <p>📧 Email: info@mirissawaves.com</p>
+                        <p>📞 Phone: +94 77 552 3939</p>
+                        <p>💬 WhatsApp: +94 77 552 3939</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Action Buttons -->
-        <div class="text-center mt-8 space-x-4">
+        <div class="text-center mt-8 payhere-actions flex flex-wrap gap-3 justify-center no-print">
+            <a href="{{ route('booking.receipt', $booking->id) }}?print=1"
+               target="_blank"
+               rel="noopener"
+               class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors duration-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                </svg>
+                Print PDF
+            </a>
             <a href="{{ route('packages') }}" 
                class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

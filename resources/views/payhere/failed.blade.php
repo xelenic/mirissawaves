@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Payment Failed - Ceylon Mirissa')
+@section('title', 'Payment Failed - Mirissawaves')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-pink-100 py-12">
+<div class="payhere-page min-h-screen bg-gradient-to-br from-red-50 to-pink-100 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Error Message -->
         <div class="text-center mb-8">
@@ -12,7 +12,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </div>
-            <h1 class="text-4xl font-bold text-gray-900 playfair mb-4">Payment Failed</h1>
+            <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 playfair mb-4">Payment Failed</h1>
             <p class="text-lg text-gray-600">We're sorry, but your payment could not be processed at this time.</p>
         </div>
 
@@ -40,16 +40,28 @@
                             <p class="text-gray-900 font-mono">#{{ $booking->id }}</p>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Package</label>
-                            <p class="text-gray-900">{{ $booking->package->title }}</p>
+                            <label class="block text-sm font-medium text-gray-700">{{ $booking->package ? 'Package' : ($booking->vehicle ? 'Vehicle & Route' : 'Booking') }}</label>
+                            <p class="text-gray-900">
+                                @if($booking->package)
+                                    {{ $booking->package->title }}
+                                @elseif($booking->vehicle)
+                                    {{ $booking->vehicle->name }}
+                                    @if($booking->pickupLocation && $booking->destinationLocation)
+                                        <span class="block text-sm text-gray-600 mt-1">{{ $booking->pickupLocation->name }} → {{ $booking->destinationLocation->name }}</span>
+                                    @endif
+                                @else
+                                    Booking #{{ $booking->id }}
+                                @endif
+                            </p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Travel Date</label>
-                            <p class="text-gray-900">{{ $booking->travel_date->format('M d, Y') }}</p>
+                            <p class="text-gray-900">{{ $booking->travel_date?->format('M d, Y') ?? 'N/A' }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Travelers</label>
-                            <p class="text-gray-900">{{ $booking->travelers }} {{ $booking->travelers == 1 ? 'Person' : 'People' }}</p>
+                            @php $guestCount = $booking->passengers ?? $booking->travelers ?? 1; @endphp
+                            <p class="text-gray-900">{{ $guestCount }} {{ $guestCount == 1 ? 'Person' : 'People' }}</p>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Total Amount</label>
@@ -111,9 +123,9 @@
                 <div class="mt-6 bg-gray-50 rounded-lg p-4">
                     <h3 class="font-semibold text-gray-900 mb-2">Get Help</h3>
                     <div class="space-y-1 text-sm text-gray-600">
-                        <p>📧 Email: info@ceylonmirissa.com</p>
-                        <p>📞 Phone: +94 77 123 4567</p>
-                        <p>💬 WhatsApp: +94 77 123 4567</p>
+                        <p>📧 Email: info@mirissawaves.com</p>
+                        <p>📞 Phone: +94 77 552 3939</p>
+                        <p>💬 WhatsApp: +94 77 552 3939</p>
                     </div>
                 </div>
             </div>
@@ -129,6 +141,7 @@
                 Try Payment Again
             </a>
             
+            @if($booking->package)
             <a href="{{ route('package.details', $booking->package->slug) }}" 
                class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors duration-300">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,6 +149,15 @@
                 </svg>
                 Back to Package
             </a>
+            @else
+            <a href="{{ url('/#booking') }}" 
+               class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Booking
+            </a>
+            @endif
         </div>
     </div>
 </div>

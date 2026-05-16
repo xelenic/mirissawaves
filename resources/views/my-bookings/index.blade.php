@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'My Bookings - Ceylon Mirissa')
-@section('description', 'View and manage your tour bookings with Ceylon Mirissa.')
+@section('title', 'My Bookings - Mirissawaves')
+@section('description', 'View and manage your tour bookings with Mirissawaves.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-[50vh] flex items-center justify-center overflow-hidden pt-20">
+<section class="relative page-hero flex items-center justify-center overflow-hidden min-h-[38vh] sm:min-h-[45vh]">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-green-900/70"></div>
     </div>
@@ -25,7 +25,7 @@
 
 <!-- Bookings Section -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -79,8 +79,10 @@
             </div>
 
             @if($bookings->count() > 0)
-                <!-- Bookings Table -->
-                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                @include('my-bookings._booking-cards-mobile', ['bookings' => $bookings])
+
+                <!-- Bookings Table (desktop) -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden bookings-table-wrap">
                     <div class="px-6 py-4 border-b border-gray-200">
                         <h2 class="text-xl font-semibold text-gray-900">Your Bookings</h2>
                     </div>

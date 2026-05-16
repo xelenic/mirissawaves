@@ -39,4 +39,19 @@ return [
         'key' => env('GOOGLE_MAPS_API_KEY'),
     ],
 
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
+
+    'social' => [
+        'facebook' => env('FACEBOOK_URL'),
+        'instagram' => env('INSTAGRAM_URL'),
+        'tripadvisor' => env('TRIPADVISOR_URL'),
+    ],
+
+    'whatsapp' => [
+        'number' => env('WHATSAPP_NUMBER', '94775523939'),
+        'default_message' => env('WHATSAPP_MESSAGE', 'Hello! I would like to inquire about Mirissawaves tours.'),
+    ],
+
 ];

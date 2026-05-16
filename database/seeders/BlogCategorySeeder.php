@@ -61,7 +61,10 @@ class BlogCategorySeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            BlogCategory::create($category);
+            BlogCategory::updateOrCreate(
+                ['slug' => $category['slug']],
+                $category
+            );
         }
     }
 }

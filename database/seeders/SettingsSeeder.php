@@ -17,7 +17,7 @@ class SettingsSeeder extends Seeder
             // General Settings
             [
                 'key' => 'site_name',
-                'value' => 'Ceylon Mirissa Tours',
+                'value' => 'Mirissawaves',
                 'type' => 'text',
                 'group' => 'general',
                 'label' => 'Site Name',
@@ -55,7 +55,7 @@ class SettingsSeeder extends Seeder
             // Contact Settings
             [
                 'key' => 'contact_email',
-                'value' => 'info@ceylonmirissa.com',
+                'value' => 'info@mirissawaves.com',
                 'type' => 'text',
                 'group' => 'contact',
                 'label' => 'Contact Email',
@@ -64,7 +64,7 @@ class SettingsSeeder extends Seeder
             ],
             [
                 'key' => 'contact_phone',
-                'value' => '+94 77 123 4567',
+                'value' => '+94 77 552 3939',
                 'type' => 'text',
                 'group' => 'contact',
                 'label' => 'Contact Phone',
@@ -109,11 +109,20 @@ class SettingsSeeder extends Seeder
                 'description' => 'Your Twitter profile URL',
                 'sort_order' => 3
             ],
+            [
+                'key' => 'tripadvisor_url',
+                'value' => '',
+                'type' => 'text',
+                'group' => 'social',
+                'label' => 'TripAdvisor URL',
+                'description' => 'Your TripAdvisor business page URL',
+                'sort_order' => 4
+            ],
 
             // SEO Settings
             [
                 'key' => 'meta_title',
-                'value' => 'Ceylon Mirissa Tours - Premium Sri Lanka Tour Packages',
+                'value' => 'Mirissawaves - Premium Sri Lanka Tour Packages',
                 'type' => 'text',
                 'group' => 'seo',
                 'label' => 'Meta Title',
@@ -122,7 +131,7 @@ class SettingsSeeder extends Seeder
             ],
             [
                 'key' => 'meta_description',
-                'value' => 'Discover Sri Lanka with Ceylon Mirissa Tours. Premium tour packages including whale watching, safari tours, and cultural experiences.',
+                'value' => 'Discover Sri Lanka with Mirissawaves. Premium tour packages including whale watching, safari tours, and cultural experiences.',
                 'type' => 'textarea',
                 'group' => 'seo',
                 'label' => 'Meta Description',
@@ -204,7 +213,16 @@ class SettingsSeeder extends Seeder
                 'label' => 'PayHere Merchant Secret',
                 'description' => 'PayHere payment gateway merchant secret',
                 'sort_order' => 3
-            ]
+            ],
+            [
+                'key' => 'promo_popup_enabled',
+                'value' => '1',
+                'type' => 'boolean',
+                'group' => 'general',
+                'label' => 'Startup promo popup',
+                'description' => 'Show promotional image popup when visitors load the site',
+                'sort_order' => 50
+            ],
         ];
 
         foreach ($settings as $setting) {

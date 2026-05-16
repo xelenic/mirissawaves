@@ -143,7 +143,7 @@
                 <div id="standard-pricing" class="md:col-span-2 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="per_km_price" class="block text-sm font-medium text-gray-700 mb-2">Price per 1km (LKR) *</label>
+                            <label for="per_km_price" class="block text-sm font-medium text-gray-700 mb-2">Price per 1km (USD) *</label>
                             <input type="number" id="per_km_price" name="per_km_price" value="{{ old('per_km_price', $vehicle->per_km_price ?? 0) }}" step="0.01" min="0"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             @error('per_km_price')
@@ -157,7 +157,7 @@
                 <div id="first-km-meter-pricing" class="md:col-span-2 space-y-4" style="display: none;">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="first_km_price" class="block text-sm font-medium text-gray-700 mb-2">Price for First 1km (LKR) *</label>
+                            <label for="first_km_price" class="block text-sm font-medium text-gray-700 mb-2">Price for First 1km (USD) *</label>
                             <input type="number" id="first_km_price" name="first_km_price" value="{{ old('first_km_price', $vehicle->first_km_price ?? $vehicle->price_first_km ?? 0) }}" step="0.01" min="0"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             @error('first_km_price')
@@ -166,7 +166,7 @@
                         </div>
                         
                         <div>
-                            <label for="per_100m_price" class="block text-sm font-medium text-gray-700 mb-2">Price per 100m After (LKR) *</label>
+                            <label for="per_100m_price" class="block text-sm font-medium text-gray-700 mb-2">Price per 100m After (USD) *</label>
                             <input type="number" id="per_100m_price" name="per_100m_price" value="{{ old('per_100m_price', $vehicle->per_100m_price ?? $vehicle->price_per_100m_after ?? 0) }}" step="0.01" min="0"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             @error('per_100m_price')

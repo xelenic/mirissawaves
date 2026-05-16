@@ -257,7 +257,7 @@
                     @if($vehicle->insurance_amount)
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Insurance Amount</label>
-                        <p class="text-sm text-gray-900">LKR {{ number_format($vehicle->insurance_amount, 2) }}</p>
+                        <p class="text-sm text-gray-900">${{ number_format($vehicle->insurance_amount, 2) }}</p>
                     </div>
                     @endif
                     @if($vehicle->insurance_expiry_date)
@@ -289,7 +289,7 @@
                         <label class="block text-sm font-medium text-gray-700">Last Maintenance</label>
                         <p class="text-sm text-gray-900">{{ $vehicle->last_maintenance_date->format('M d, Y') }}</p>
                         @if($vehicle->last_maintenance_cost)
-                            <p class="text-xs text-gray-500">Cost: LKR {{ number_format($vehicle->last_maintenance_cost, 2) }}</p>
+                            <p class="text-xs text-gray-500">Cost: ${{ number_format($vehicle->last_maintenance_cost, 2) }}</p>
                         @endif
                     </div>
                     @endif

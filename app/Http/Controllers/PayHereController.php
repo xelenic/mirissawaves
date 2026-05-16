@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Services\BookingNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
 
 class PayHereController extends Controller
 {
@@ -41,6 +41,9 @@ class PayHereController extends Controller
             'payment_method' => 'payhere'
         ]);
 
+        $currency = strtoupper(config('payhere.currency', 'USD'));
+        $amount = number_format((float) $booking->total_amount, 2, '.', '');
+
         // Prepare payment data
         $paymentData = [
             'merchant_id' => $this->merchantId,
@@ -58,9 +61,9 @@ class PayHereController extends Controller
             'items' => $booking->booking_type === 'vehicle' 
                 ? ($booking->vehicle ? $booking->vehicle->name : 'Vehicle Booking')
                 : ($booking->package ? $booking->package->title : 'Booking'),
-            'currency' => 'LKR',
-            'amount' => number_format($booking->total_amount, 2, '.', ''),
-            'hash' => $this->generateHash($orderId, $booking->total_amount, 'LKR')
+            'currency' => $currency,
+            'amount' => $amount,
+            'hash' => $this->generateHash($orderId, $amount, $currency)
         ];
 
         return view('payhere.payment-form', compact('paymentData', 'booking'));
@@ -95,28 +98,16 @@ class PayHereController extends Controller
             // since PayHere only redirects to return URL on successful payment
             if (!$status && !$paymentId) {
                 Log::info('PayHere return: Only order_id provided, assuming payment successful');
-                
-                // Update booking status to paid since PayHere redirected here
-                $booking->update([
-                    'payment_status' => 'paid',
-                    'status' => 'confirmed'
-                ]);
-                
-                Log::info('PayHere return: Updated booking status to paid for booking ID: ' . $booking->id);
-                
+
+                $this->markBookingPaid($booking, null);
+
                 return redirect()->route('booking.success', $booking->id)
                     ->with('success', 'Payment successful! Your booking has been confirmed.');
             }
 
             // Handle explicit status from PayHere
             if ($status === '2') { // Payment successful
-                $booking->update([
-                    'payment_status' => 'paid',
-                    'payhere_payment_id' => $paymentId,
-                    'status' => 'confirmed'
-                ]);
-
-                Log::info('PayHere return: Payment successful for booking ID: ' . $booking->id);
+                $this->markBookingPaid($booking, $paymentId);
 
                 return redirect()->route('booking.success', $booking->id)
                     ->with('success', 'Payment successful! Your booking has been confirmed.');
@@ -150,7 +141,12 @@ class PayHereController extends Controller
             ]);
         }
 
-        return redirect()->route('package.details', $booking->package->slug)
+        if ($booking?->package) {
+            return redirect()->route('package.details', $booking->package->slug)
+                ->with('error', 'Payment was cancelled. You can try again anytime.');
+        }
+
+        return redirect()->to(url('/#booking'))
             ->with('error', 'Payment was cancelled. You can try again anytime.');
     }
 
@@ -190,11 +186,7 @@ class PayHereController extends Controller
             // Update booking based on status
             switch ($status) {
                 case '2': // Payment successful
-                    $booking->update([
-                        'payment_status' => 'paid',
-                        'payhere_payment_id' => $paymentId,
-                        'status' => 'confirmed'
-                    ]);
+                    $this->markBookingPaid($booking, $paymentId);
                     break;
                 case '0': // Payment failed
                     $booking->update([
@@ -222,6 +214,21 @@ class PayHereController extends Controller
         }
     }
 
+    protected function markBookingPaid(Booking $booking, ?string $paymentId): void
+    {
+        $wasPaid = $booking->payment_status === 'paid';
+
+        $booking->update([
+            'payment_status' => 'paid',
+            'payhere_payment_id' => $paymentId ?? $booking->payhere_payment_id,
+            'status' => 'confirmed',
+        ]);
+
+        if (!$wasPaid) {
+            app(BookingNotificationService::class)->sendPaymentConfirmationIfNeeded($booking);
+        }
+    }
+
     /**
      * Generate hash for PayHere
      */
@@ -245,7 +252,15 @@ class PayHereController extends Controller
      */
     public function showSuccess($bookingId)
     {
-        $booking = Booking::with(['package', 'package.media', 'user'])->findOrFail($bookingId);
+        $booking = Booking::with([
+            'package',
+            'package.media',
+            'vehicle',
+            'pickupLocation',
+            'destinationLocation',
+            'user',
+        ])->findOrFail($bookingId);
+
         return view('payhere.success', compact('booking'));
     }
 
@@ -254,7 +269,31 @@ class PayHereController extends Controller
      */
     public function showFailed($bookingId)
     {
-        $booking = Booking::with(['package', 'package.media', 'user'])->findOrFail($bookingId);
+        $booking = Booking::with([
+            'package',
+            'package.media',
+            'vehicle',
+            'pickupLocation',
+            'destinationLocation',
+            'user',
+        ])->findOrFail($bookingId);
+
         return view('payhere.failed', compact('booking'));
+    }
+
+    /**
+     * Printable booking receipt (browser Print → Save as PDF)
+     */
+    public function printReceipt($bookingId)
+    {
+        $booking = Booking::with([
+            'package',
+            'vehicle',
+            'pickupLocation',
+            'destinationLocation',
+            'user',
+        ])->findOrFail($bookingId);
+
+        return view('payhere.receipt', compact('booking'));
     }
 }

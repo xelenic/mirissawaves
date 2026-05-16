@@ -1,0 +1,298 @@
+/* Customer-facing mobile responsiveness */
+:root {
+    --site-nav-height: 4rem;
+}
+
+@media (max-width: 640px) {
+    :root {
+        --site-nav-height: 3.5rem;
+    }
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Only the main nav row — not nested flex (desktop menu, search, etc.) */
+.navbar > .container {
+    min-height: var(--site-nav-height);
+}
+
+.navbar > .container > .navbar-inner {
+    min-height: var(--site-nav-height);
+    height: var(--site-nav-height);
+}
+
+main.site-main {
+    padding-top: var(--site-nav-height) !important;
+}
+
+.mobile-menu {
+    top: var(--site-nav-height) !important;
+    height: calc(100dvh - var(--site-nav-height)) !important;
+}
+
+@media (max-width: 1023px) {
+    .navbar .site-logo {
+        max-height: calc(var(--site-nav-height) - 0.5rem);
+        max-width: min(52vw, 11rem);
+    }
+}
+
+/* Desktop navbar */
+@media (min-width: 1024px) {
+    :root {
+        --site-nav-height: 4.5rem;
+    }
+
+    .navbar > .container > .navbar-inner {
+        height: var(--site-nav-height);
+        min-height: var(--site-nav-height);
+    }
+
+    .navbar .site-logo {
+        max-height: 2.75rem;
+        max-width: 14rem;
+        width: auto !important;
+        height: auto !important;
+    }
+
+    .navbar-desktop-nav {
+        flex: 1 1 auto;
+        justify-content: flex-end;
+        min-width: 0;
+        gap: 0.75rem;
+    }
+
+    .navbar-desktop-nav .nav-link {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .navbar-desktop-nav .search-container {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+
+    @media (min-width: 1280px) {
+        .navbar-desktop-nav {
+            gap: 1.25rem;
+        }
+    }
+
+    .navbar-user-name {
+        max-width: 7.5rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    @media (min-width: 1280px) {
+        .navbar-user-name {
+            max-width: 10rem;
+        }
+    }
+}
+
+.customer-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .customer-container {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+/* Inner page heroes: avoid double padding under fixed nav */
+.page-hero {
+    padding-top: 1rem !important;
+    min-height: auto !important;
+}
+
+@media (min-width: 768px) {
+    .page-hero {
+        min-height: 50vh;
+        padding-top: 1.5rem !important;
+    }
+}
+
+.page-hero h1 {
+    font-size: clamp(1.5rem, 5vw, 2.25rem) !important;
+    line-height: 1.2;
+}
+
+/* Full-screen detail heroes */
+.detail-hero {
+    min-height: min(70vh, 640px) !important;
+    height: auto !important;
+}
+
+@media (min-width: 1024px) {
+    .detail-hero {
+        min-height: 100vh;
+        height: 100vh;
+    }
+}
+
+.detail-hero-card {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: -2rem;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1rem !important;
+}
+
+@media (min-width: 640px) {
+    .detail-hero-card {
+        padding: 1.5rem !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .detail-hero-card {
+        position: absolute !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: 0;
+        border-radius: 0;
+        padding: 2rem !important;
+    }
+}
+
+.detail-hero-card h1 {
+    font-size: clamp(1.375rem, 4.5vw, 3rem) !important;
+}
+
+.detail-hero-card .detail-meta {
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+}
+
+.detail-hero .swiper-button-next,
+.detail-hero .swiper-button-prev {
+    transform: scale(0.75);
+}
+
+@media (min-width: 640px) {
+    .detail-hero .swiper-button-next,
+    .detail-hero .swiper-button-prev {
+        transform: scale(1);
+    }
+}
+
+/* Flash toasts */
+#success-message,
+#error-message {
+    left: 1rem;
+    right: 1rem;
+    max-width: calc(100vw - 2rem);
+}
+
+@media (min-width: 640px) {
+    #success-message,
+    #error-message {
+        left: auto;
+        right: 1rem;
+        max-width: 24rem;
+    }
+}
+
+/* WhatsApp FAB */
+#chatButton {
+    bottom: max(1rem, env(safe-area-inset-bottom, 1rem));
+    right: max(1rem, env(safe-area-inset-right, 1rem));
+}
+
+.mobile-menu-btn,
+.mobile-menu button[onclick] {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* My bookings: hide table on small screens */
+@media (max-width: 1023px) {
+    .bookings-table-wrap {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .bookings-cards-mobile {
+        display: none !important;
+    }
+}
+
+/* Prevent long text overflow */
+.break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* Home map */
+.home-map {
+    height: 280px !important;
+}
+
+@media (min-width: 640px) {
+    .home-map {
+        height: 380px !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .home-map {
+        height: 500px !important;
+    }
+}
+
+/* Prose / article content */
+.prose img,
+.prose video,
+.prose iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.prose {
+    overflow-wrap: break-word;
+}
+
+/* PayHere & status pages */
+.payhere-page h1 {
+    font-size: clamp(1.5rem, 5vw, 2.25rem) !important;
+}
+
+.payhere-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .payhere-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Auth forms */
+.auth-page {
+    min-height: calc(100dvh - var(--site-nav-height));
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Vehicle booking + modal: see vehicle-booking/_results-view-styles and _booking-modal-styles */

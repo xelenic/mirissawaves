@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Travel Blog - Ceylon Mirissa')
+@section('title', 'Travel Blog - Mirissawaves')
 @section('description', 'Discover Sri Lanka through our travel blog. Get insider tips, cultural insights, and adventure guides for your perfect Sri Lankan journey.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-64 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 overflow-hidden pt-20">
+<section class="relative page-hero py-10 sm:py-14 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 overflow-hidden">
     <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="relative z-10 h-full flex items-center justify-center text-center text-white">
             <div class="max-w-4xl mx-auto">
                 <h1 class="text-3xl md:text-4xl font-bold playfair mb-4 animate-fade-in">
@@ -38,7 +38,7 @@
 <!-- Featured Posts Section -->
 @if($featuredBlogs->count() > 0)
 <section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl font-bold text-gray-900 playfair mb-4">Featured Stories</h2>
@@ -49,7 +49,7 @@
                 @foreach($featuredBlogs as $blog)
                 <article class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="relative h-48">
-                        <img src="{{ $blog->featured_image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover">
+                        <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->title" placeholder="blog" class="w-full h-full object-cover" />
                         <div class="absolute top-4 left-4">
                             <span class="text-white px-3 py-1 rounded-full text-sm font-semibold" style="background-color: {{ $blog->category->color }}">
                                 {{ $blog->category->name }}
@@ -108,7 +108,7 @@
 
 <!-- Filter and Search Section -->
 <section class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold text-gray-900 playfair mb-4">Explore Our Stories</h2>
@@ -145,7 +145,7 @@
 
 <!-- Blog Posts Grid -->
 <section id="blog-posts" class="py-16 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             @if($blogs->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -153,7 +153,7 @@
                 <article class="blog-card group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden">
                     <!-- Blog Image -->
                     <div class="relative h-48 overflow-hidden">
-                        <img src="{{ $blog->featured_image_url }}" alt="{{ $blog->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->title" placeholder="blog" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                         <div class="absolute top-4 left-4">
                             <span class="text-white px-3 py-1 rounded-full text-sm font-semibold" style="background-color: {{ $blog->category->color }}">
                                 {{ $blog->category->name }}
@@ -241,7 +241,7 @@
 
 <!-- Newsletter Section -->
 <section class="py-16 bg-gradient-to-r from-blue-600 to-green-600">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-4xl mx-auto text-center text-white">
             <h2 class="text-3xl font-bold playfair mb-4">Stay Updated</h2>
             <p class="text-xl mb-8 opacity-90">Get the latest travel tips and stories delivered to your inbox</p>

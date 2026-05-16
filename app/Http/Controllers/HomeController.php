@@ -167,21 +167,21 @@ class HomeController extends Controller
             
             if ($distance <= 1) {
                 $price = $firstKmPrice;
-                $priceBreakdown[] = "First 1km: LKR " . number_format($firstKmPrice, 2);
+                $priceBreakdown[] = "First 1km: $" . number_format($firstKmPrice, 2);
             } else {
                 $remainingDistance = $distance - 1;
                 $remainingMeters = $remainingDistance * 1000; // Convert to meters
                 $additionalPrice = ceil($remainingMeters / 100) * $per100mPrice; // Round up to nearest 100m
                 
                 $price = $firstKmPrice + $additionalPrice;
-                $priceBreakdown[] = "First 1km: LKR " . number_format($firstKmPrice, 2);
-                $priceBreakdown[] = "Additional " . number_format($remainingDistance, 2) . "km: LKR " . number_format($additionalPrice, 2);
+                $priceBreakdown[] = "First 1km: $" . number_format($firstKmPrice, 2);
+                $priceBreakdown[] = "Additional " . number_format($remainingDistance, 2) . "km: $" . number_format($additionalPrice, 2);
             }
         } else {
             // Standard per KM pricing
             $perKmPrice = $vehicle->per_km_price ?? 0;
             $price = $distance * $perKmPrice;
-            $priceBreakdown[] = "Per km rate: LKR " . number_format($perKmPrice, 2);
+            $priceBreakdown[] = "Per km rate: $" . number_format($perKmPrice, 2);
             $priceBreakdown[] = "Distance: " . number_format($distance, 2) . "km";
         }
 
@@ -189,7 +189,7 @@ class HomeController extends Controller
             'success' => true,
             'data' => [
                 'total_price' => round($price, 2),
-                'formatted_price' => 'LKR ' . number_format($price, 2),
+                'formatted_price' => '$' . number_format($price, 2),
                 'distance' => round($distance, 2),
                 'vehicle_name' => $vehicle->name,
                 'vehicle_type' => ucfirst(str_replace('_', ' ', $vehicle->type)),

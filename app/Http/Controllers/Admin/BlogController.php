@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Media;
-use Illuminate\Support\Str;
+use App\Services\GeminiArticleService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Throwable;
 
 class BlogController extends Controller
 {
@@ -17,7 +20,7 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Blog::with('category')->latest();
+        $query = Blog::with(['category', 'media'])->latest();
 
         // Filter by status
         if ($request->has('status')) {
@@ -40,10 +43,54 @@ class BlogController extends Controller
     /**
      * Show the form for creating a new blog.
      */
-    public function create()
+    public function create(GeminiArticleService $gemini)
     {
         $categories = BlogCategory::active()->ordered()->get();
-        return view('admin.blog.create', compact('categories'));
+
+        return view('admin.blog.create', [
+            'categories' => $categories,
+            'geminiConfigured' => $gemini->isConfigured(),
+        ]);
+    }
+
+    public function generateArticle(Request $request, GeminiArticleService $gemini): JsonResponse
+    {
+        if (!$gemini->isConfigured()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gemini API key is not configured. Add GEMINI_API_KEY to your .env file.',
+            ], 503);
+        }
+
+        $validated = $request->validate([
+            'topic' => 'required|string|min:5|max:500',
+            'blog_category_id' => 'nullable|exists:blog_categories,id',
+            'tone' => 'nullable|in:informative,friendly,professional,adventurous',
+        ]);
+
+        $categoryName = null;
+        if (!empty($validated['blog_category_id'])) {
+            $categoryName = BlogCategory::find($validated['blog_category_id'])?->name;
+        }
+
+        try {
+            $article = $gemini->generate(
+                $validated['topic'],
+                $categoryName,
+                $validated['tone'] ?? 'informative'
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Article generated successfully.',
+                'article' => $article,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
     }
 
     /**
@@ -121,10 +168,15 @@ class BlogController extends Controller
     /**
      * Show the form for editing the blog.
      */
-    public function edit(Blog $blog)
+    public function edit(Blog $blog, GeminiArticleService $gemini)
     {
         $categories = BlogCategory::active()->ordered()->get();
-        return view('admin.blog.edit', compact('blog', 'categories'));
+
+        return view('admin.blog.edit', [
+            'blog' => $blog,
+            'categories' => $categories,
+            'geminiConfigured' => $gemini->isConfigured(),
+        ]);
     }
 
     /**

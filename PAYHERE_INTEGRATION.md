@@ -1,6 +1,6 @@
 # PayHere Payment Gateway Integration
 
-This document provides instructions for setting up and using the PayHere payment gateway integration for the Ceylon Mirissa booking system.
+This document provides instructions for setting up and using the PayHere payment gateway integration for the Mirissawaves booking system.
 
 ## Overview
 

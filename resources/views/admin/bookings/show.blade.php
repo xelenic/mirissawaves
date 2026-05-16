@@ -49,6 +49,7 @@
             </div>
         </div>
 
+        @if($booking->package)
         <!-- Package Information -->
         <div class="bg-white rounded-lg shadow-md">
             <div class="px-6 py-4 border-b border-gray-200">
@@ -62,7 +63,7 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                        <p class="text-sm text-gray-900">{{ $booking->package->category->name }}</p>
+                        <p class="text-sm text-gray-900">{{ $booking->package->category?->name ?? '—' }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
@@ -75,6 +76,40 @@
                 </div>
             </div>
         </div>
+        @elseif($booking->vehicle)
+        <!-- Vehicle & Route Information -->
+        <div class="bg-white rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Vehicle & Route</h3>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Vehicle</label>
+                        <p class="text-sm text-gray-900">{{ $booking->vehicle->name }}</p>
+                    </div>
+                    @if($booking->pickupLocation && $booking->destinationLocation)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Route</label>
+                        <p class="text-sm text-gray-900">{{ $booking->pickupLocation->name }} → {{ $booking->destinationLocation->name }}</p>
+                    </div>
+                    @endif
+                    @if($booking->distance)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Distance</label>
+                        <p class="text-sm text-gray-900">{{ number_format($booking->distance, 1) }} km</p>
+                    </div>
+                    @endif
+                    @if($booking->pickup_time)
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pickup Time</label>
+                        <p class="text-sm text-gray-900">{{ $booking->pickup_time->format('g:i A') }}</p>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endif
 
         <!-- Travel Details -->
         <div class="bg-white rounded-lg shadow-md">
@@ -89,7 +124,8 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Number of Travelers</label>
-                        <p class="text-sm text-gray-900">{{ $booking->travelers }} {{ $booking->travelers == 1 ? 'Person' : 'People' }}</p>
+                        @php $guestCount = $booking->passengers ?? $booking->travelers ?? 1; @endphp
+                        <p class="text-sm text-gray-900">{{ $guestCount }} {{ $guestCount == 1 ? 'Person' : 'People' }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Total Amount</label>
@@ -151,13 +187,13 @@
         </div>
 
         <!-- Special Requirements -->
-        @if($booking->special_requirements)
+        @if($booking->special_requests)
         <div class="bg-white rounded-lg shadow-md">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-medium text-gray-900">Special Requirements</h3>
             </div>
             <div class="p-6">
-                <p class="text-sm text-gray-900">{{ $booking->special_requirements }}</p>
+                <p class="text-sm text-gray-900">{{ $booking->special_requests }}</p>
             </div>
         </div>
         @endif
@@ -255,10 +291,12 @@
                     Call Customer
                 </a>
                 @endif
+                @if($booking->package)
                 <a href="{{ route('package.details', $booking->package->slug) }}" target="_blank" class="block w-full bg-purple-50 hover:bg-purple-100 text-purple-700 py-2 px-4 rounded-lg font-semibold transition-colors duration-300 text-center">
                     <i class="fas fa-external-link-alt mr-2"></i>
                     View Package
                 </a>
+                @endif
             </div>
         </div>
     </div>

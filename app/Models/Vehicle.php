@@ -128,7 +128,7 @@ class Vehicle extends Model
      */
     public function getFormattedPriceFirstKmAttribute(): string
     {
-        return 'LKR ' . number_format($this->price_first_km, 2);
+        return '$' . number_format($this->price_first_km, 2);
     }
 
     /**
@@ -136,7 +136,7 @@ class Vehicle extends Model
      */
     public function getFormattedPricePer100mAfterAttribute(): string
     {
-        return 'LKR ' . number_format($this->price_per_100m_after, 2);
+        return '$' . number_format($this->price_per_100m_after, 2);
     }
 
     /**
@@ -144,7 +144,7 @@ class Vehicle extends Model
      */
     public function getFormattedPerKmPriceAttribute(): string
     {
-        return $this->per_km_price ? 'LKR ' . number_format($this->per_km_price, 2) : 'N/A';
+        return $this->per_km_price ? '$' . number_format($this->per_km_price, 2) : 'N/A';
     }
 
     /**
@@ -152,7 +152,7 @@ class Vehicle extends Model
      */
     public function getFormattedFirstKmPriceAttribute(): string
     {
-        return $this->first_km_price ? 'LKR ' . number_format($this->first_km_price, 2) : 'N/A';
+        return $this->first_km_price ? '$' . number_format($this->first_km_price, 2) : 'N/A';
     }
 
     /**
@@ -160,7 +160,7 @@ class Vehicle extends Model
      */
     public function getFormattedPer100mPriceAttribute(): string
     {
-        return $this->per_100m_price ? 'LKR ' . number_format($this->per_100m_price, 2) : 'N/A';
+        return $this->per_100m_price ? '$' . number_format($this->per_100m_price, 2) : 'N/A';
     }
 
     /**
@@ -180,7 +180,7 @@ class Vehicle extends Model
      */
     public function getFormattedInsuranceAmountAttribute(): string
     {
-        return $this->insurance_amount ? 'LKR ' . number_format($this->insurance_amount, 2) : 'N/A';
+        return $this->insurance_amount ? '$' . number_format($this->insurance_amount, 2) : 'N/A';
     }
 
     /**
@@ -188,7 +188,7 @@ class Vehicle extends Model
      */
     public function getFormattedMaintenanceCostAttribute(): string
     {
-        return $this->last_maintenance_cost ? 'LKR ' . number_format($this->last_maintenance_cost, 2) : 'N/A';
+        return $this->last_maintenance_cost ? '$' . number_format($this->last_maintenance_cost, 2) : 'N/A';
     }
 
     /**

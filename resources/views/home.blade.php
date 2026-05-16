@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Ceylon Mirissa - Discover Paradise')
-@section('description', 'Experience the magic of Sri Lanka with Ceylon Mirissa. Discover ancient temples, pristine beaches, and unforgettable adventures.')
+@section('title', 'Mirissawaves - Discover Paradise')
+@section('description', 'Experience the magic of Sri Lanka with Mirissawaves. Discover ancient temples, pristine beaches, and unforgettable adventures.')
 
 @push('styles')
 <style>
@@ -31,10 +31,63 @@
     .leaflet-popup-content p {
         margin: 0;
     }
+
+    .home-social-sidebar {
+        position: fixed;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 40;
+        display: none;
+        flex-direction: column;
+        gap: 0.75rem;
+        pointer-events: auto;
+    }
+    @media (min-width: 1024px) {
+        .home-social-sidebar {
+            display: flex;
+            left: 2rem;
+        }
+    }
+    .home-social-sidebar__btn--disabled {
+        opacity: 0.45;
+        cursor: default;
+        pointer-events: none;
+    }
+    .home-social-sidebar__btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 9999px;
+        color: #fff;
+        font-size: 1.125rem;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+    .home-social-sidebar__btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        opacity: 0.95;
+    }
+    .home-social-sidebar__btn--facebook {
+        background: #1877f2;
+    }
+    .home-social-sidebar__btn--instagram {
+        background: linear-gradient(135deg, #f58529 0%, #dd2a7b 50%, #8134af 100%);
+    }
+    .home-social-sidebar__btn--tripadvisor {
+        background: #34e0a1;
+        color: #000;
+    }
 </style>
 @endpush
 
 @section('content')
+<x-home-social-sidebar />
+
 <!-- Hero Section with Swiper Slider -->
 <section id="home" class="relative h-[75vh] overflow-hidden">
     <!-- Swiper Container -->
@@ -48,7 +101,7 @@
                 <!-- Main Content -->
                 <div class="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
                     <div class="max-w-4xl mx-auto">
-                        <h1 class="text-5xl md:text-7xl font-bold playfair mb-6 animate-fade-in">
+                        <h1 class="text-3xl sm:text-5xl md:text-7xl font-bold playfair mb-6 animate-fade-in">
                             Ancient
                             <span class="gradient-text">Sigiriya</span>
                         </h1>
@@ -148,7 +201,7 @@
                 <!-- Main Content -->
                 <div class="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
                     <div class="max-w-4xl mx-auto">
-                        <h1 class="text-5xl md:text-7xl font-bold playfair mb-6">
+                        <h1 class="text-3xl sm:text-5xl md:text-7xl font-bold playfair mb-6">
                             Whale
                             <span class="gradient-text">Watching</span>
                         </h1>
@@ -248,7 +301,7 @@
                 <!-- Main Content -->
                 <div class="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
                     <div class="max-w-4xl mx-auto">
-                        <h1 class="text-5xl md:text-7xl font-bold playfair mb-6">
+                        <h1 class="text-3xl sm:text-5xl md:text-7xl font-bold playfair mb-6">
                             Ella Rock
                             <span class="gradient-text">Hiking</span>
                         </h1>
@@ -348,7 +401,7 @@
                 <!-- Main Content -->
                 <div class="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
                     <div class="max-w-4xl mx-auto">
-                        <h1 class="text-5xl md:text-7xl font-bold playfair mb-6">
+                        <h1 class="text-3xl sm:text-5xl md:text-7xl font-bold playfair mb-6">
                             Sacred
                             <span class="gradient-text">Kandy</span>
                         </h1>
@@ -449,7 +502,7 @@
                 <!-- Main Content -->
                 <div class="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
                     <div class="max-w-4xl mx-auto">
-                        <h1 class="text-5xl md:text-7xl font-bold playfair mb-6">
+                        <h1 class="text-3xl sm:text-5xl md:text-7xl font-bold playfair mb-6">
                             Arugam Bay
                             <span class="gradient-text">Surfing</span>
                         </h1>
@@ -560,7 +613,7 @@
 
 <!-- Booking Section -->
 <section id="booking" class="py-20 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-bold text-gray-900 playfair mb-6">
@@ -578,7 +631,7 @@
                     <form id="bookingForm" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="pickupLocation" class="block text-sm font-semibold text-gray-700 mb-2">Pickup Location</label>
+                                <label for="pickupLocation" class="block text-sm font-semibold text-gray-700 mb-2">Pickup Location <span class="text-red-500">*</span></label>
                                 <select id="pickupLocation" name="pickupLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                                     <option value="">Select pickup location</option>
                                     @foreach($locations as $location)
@@ -587,7 +640,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="destinationLocation" class="block text-sm font-semibold text-gray-700 mb-2">Destination</label>
+                                <label for="destinationLocation" class="block text-sm font-semibold text-gray-700 mb-2">Destination <span class="text-red-500">*</span></label>
                                 <select id="destinationLocation" name="destinationLocation" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                                     <option value="">Select destination</option>
                                     @foreach($locations as $location)
@@ -596,6 +649,12 @@
                                 </select>
                             </div>
                         </div>
+                        @if(session('booking_error'))
+                            <p class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 -mt-2">{{ session('booking_error') }}</p>
+                        @endif
+                        <p id="routeSelectionHint" class="text-sm text-gray-600 -mt-2">
+                            Pick pickup and destination to draw your route on the map, then tap <strong>Plan My Journey</strong> to see available vehicles and prices on the next page.
+                        </p>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -607,48 +666,7 @@
                                 <input type="time" id="pickupTime" name="pickupTime" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                             </div>
                         </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="vehicle" class="block text-sm font-semibold text-gray-700 mb-2">Vehicle</label>
-                                <select id="vehicle" name="vehicle" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
-                                    <option value="">Select vehicle</option>
-                                    @foreach($vehicles as $vehicle)
-                                        <option value="{{ $vehicle['id'] }}" 
-                                                data-pax="{{ $vehicle['pax_count'] }}"
-                                                data-pricing-type="{{ $vehicle['effective_pricing_type'] }}"
-                                                data-per-km-price="{{ $vehicle['per_km_price'] }}"
-                                                data-first-km-price="{{ $vehicle['price_first_km'] }}"
-                                                data-per-100m-price="{{ $vehicle['price_per_100m_after'] }}">
-                                            {{ $vehicle['name'] }} - {{ $vehicle['description'] }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <label for="paxCount" class="block text-sm font-semibold text-gray-700 mb-2">Number of Passengers</label>
-                                <input type="number" id="paxCount" name="paxCount" min="1" max="20" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
-                                <p class="text-xs text-gray-500 mt-1">Maximum capacity will be updated based on selected vehicle</p>
-                                <div id="vehicleInfo" class="text-sm text-gray-500 mt-1">Please select a vehicle to see passenger capacity</div>
-                                <div id="paxError" class="hidden text-sm text-red-600 mt-1"></div>
-                            </div>
-                        </div>
-                        
-                        <!-- Price Display Section -->
-                        <div id="priceDisplay" class="hidden bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-4 border border-green-200">
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="text-lg font-semibold text-gray-900">Estimated Price</h3>
-                                <div id="totalPrice" class="text-2xl font-bold text-green-600"></div>
-                            </div>
-                            <div id="priceBreakdown" class="text-sm text-gray-600 space-y-1"></div>
-                            <div class="mt-3 pt-3 border-t border-green-200">
-                                <div class="flex items-center text-xs text-gray-500">
-                                    <i class="fas fa-info-circle mr-1"></i>
-                                    <span>Price calculated based on distance and selected vehicle</span>
-                                </div>
-                            </div>
-                        </div>
-                        
+
                         <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white py-4 rounded-lg font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg mb-3">
                             Plan My Journey
                         </button>
@@ -662,71 +680,7 @@
                 <!-- Map Container -->
                 <div class="bg-white rounded-2xl shadow-xl p-8">
                     <div id="mapContainer" class="relative">
-                        <div id="map" style="height: 500px; width: 100%; border-radius: 12px; overflow: hidden;"></div>
-                        
-                        <!-- Enhanced Map Legend -->
-                        <div class="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-4 z-10 border border-gray-200">
-                            <h4 class="font-semibold text-gray-900 mb-3 text-sm flex items-center">
-                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-                                Map Legend
-                            </h4>
-                            <div class="space-y-2 text-xs">
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-red-500 rounded-full mr-2 flex items-center justify-center">
-                                        <i class="fas fa-map-marker-alt text-white text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Pickup Point</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-blue-500 rounded-lg mr-2 flex items-center justify-center">
-                                        <i class="fas fa-home text-white text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Destination</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-yellow-500 rounded-full mr-2 flex items-center justify-center">
-                                        <i class="fas fa-circle text-white text-xs"></i>
-                                </div>
-                                    <span class="font-medium">Route Waypoint</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-gray-500 rounded-full mr-2"></div>
-                                    <span class="font-medium">Available Locations</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-1 bg-blue-500 mr-2" style="border-radius: 2px;"></div>
-                                    <span class="font-medium">Primary Route</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-1 bg-green-500 mr-2" style="border-radius: 2px; border: 1px dashed #34a853;"></div>
-                                    <span class="font-medium">Alternative Routes</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-3 bg-white border border-gray-200 rounded mr-2 flex items-center justify-center">
-                                        <i class="fas fa-car text-blue-500 text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Route Info</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-purple-500 rounded-full mr-2 flex items-center justify-center">
-                                        <i class="fas fa-camera text-white text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Tourist Attractions</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-green-500 rounded-full mr-2 flex items-center justify-center">
-                                        <i class="fas fa-mountain text-white text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Mountain Peaks</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <div class="w-4 h-4 bg-blue-500 rounded-full mr-2 flex items-center justify-center">
-                                        <i class="fas fa-suitcase text-white text-xs"></i>
-                                    </div>
-                                    <span class="font-medium">Travel Hubs</span>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="map" class="home-map w-full rounded-xl overflow-hidden" style="width: 100%;"></div>
                         
                         <div id="routeInfo" class="mt-4 p-5 bg-gradient-to-br from-blue-50 via-green-50 to-blue-50 rounded-xl shadow-lg border border-blue-200 hidden animate-fade-in">
                             <div class="flex items-center justify-between mb-4">
@@ -762,13 +716,15 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 </section>
 
 <!-- Featured Packages Section -->
 <section id="packages" class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -873,7 +829,7 @@
 
 <!-- Customer Reviews Section -->
 <section id="reviews" class="py-12 bg-gradient-to-br from-blue-50 to-green-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -881,7 +837,7 @@
                     <span class="gradient-text">Customers Say</span>
                 </h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                    Don't just take our word for it. Here's what our amazing customers have to say about their experiences with Ceylon Mirissa.
+                    Don't just take our word for it. Here's what our amazing customers have to say about their experiences with Mirissawaves.
                 </p>
             </div>
             
@@ -956,7 +912,7 @@
                     </svg>
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-4">No Reviews Yet</h3>
-                <p class="text-gray-600 mb-8">Be the first to share your experience with Ceylon Mirissa!</p>
+                <p class="text-gray-600 mb-8">Be the first to share your experience with Mirissawaves!</p>
                 <a href="{{ route('packages') }}" class="inline-block bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Book Your Adventure
                 </a>
@@ -969,7 +925,7 @@
 
 <!-- Reviews Section -->
 <section class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-gray-900 playfair mb-4">
@@ -1009,7 +965,7 @@
                         </svg>
                     </div>
                     <p class="text-sm text-gray-600 leading-relaxed">
-                        "The whale watching tour was absolutely breathtaking! Ceylon Mirissa made our trip unforgettable. The guides were knowledgeable and friendly. Highly recommended!"
+                        "The whale watching tour was absolutely breathtaking! Mirissawaves made our trip unforgettable. The guides were knowledgeable and friendly. Highly recommended!"
                     </p>
                 </div>
                 
@@ -1077,7 +1033,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        "The Ella Rock trekking was amazing! Beautiful scenery and excellent organization. Ceylon Mirissa exceeded all our expectations. Will definitely book again!"
+                        "The Ella Rock trekking was amazing! Beautiful scenery and excellent organization. Mirissawaves exceeded all our expectations. Will definitely book again!"
                     </p>
                 </div>
                 
@@ -1145,7 +1101,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        "Arugam Bay surfing adventure was epic! Perfect waves and great instructors. Ceylon Mirissa made our surf trip a dream come true. Thank you!"
+                        "Arugam Bay surfing adventure was epic! Perfect waves and great instructors. Mirissawaves made our surf trip a dream come true. Thank you!"
                     </p>
                 </div>
                 
@@ -1179,7 +1135,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-600 leading-relaxed">
-                        "Perfect blend of culture and nature! Every detail was well-planned. The team was attentive and made us feel special. Highly recommend Ceylon Mirissa!"
+                        "Perfect blend of culture and nature! Every detail was well-planned. The team was attentive and made us feel special. Highly recommend Mirissawaves!"
                     </p>
                 </div>
             </div>
@@ -1195,132 +1151,6 @@
         </div>
     </div>
 </section>
-
-<!-- Booking Modal -->
-<div id="bookingModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black bg-opacity-50 p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-6 rounded-t-2xl">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-2xl font-bold">Complete Your Booking</h2>
-                    <p class="text-sm opacity-90 mt-1">Provide your details to confirm your travel order</p>
-                </div>
-                <button onclick="closeBookingModal()" class="text-white hover:text-gray-200 transition-colors duration-300 p-2 rounded-full hover:bg-white hover:bg-opacity-20">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Modal Body -->
-        <div class="p-6">
-            <!-- Booking Summary -->
-            <div class="bg-blue-50 rounded-lg p-4 mb-6">
-                <h3 class="font-semibold text-gray-900 mb-2">Booking Summary</h3>
-                <div id="bookingSummary" class="text-sm text-gray-600 space-y-1">
-                    <!-- Will be populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Booking Form -->
-            <form id="finalBookingForm" class="space-y-4">
-                @auth
-                <!-- Logged-in user fields (pre-filled and read-only) -->
-                <div class="bg-blue-50 rounded-lg p-4 mb-4">
-                    <div class="flex items-center">
-                        <i class="fas fa-user-circle text-blue-600 mr-2"></i>
-                        <span class="text-sm font-medium text-blue-600">You are logged in as: {{ Auth::user()->email }}</span>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="fullName" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Full Name <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="fullName" name="fullName" value="{{ Auth::user()->name }}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50" readonly>
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Email Address <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email" id="email" name="email" value="{{ Auth::user()->email }}" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50" readonly>
-                    </div>
-                </div>
-                <div>
-                    <label for="phoneNumber" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Phone Number <span class="text-red-500">*</span>
-                    </label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    <input type="hidden" name="password" value="">
-                </div>
-                @else
-                <!-- Guest user fields -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="fullName" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Full Name <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="fullName" name="fullName" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Email Address <span class="text-red-500">*</span>
-                        </label>
-                        <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label for="phoneNumber" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Phone Number <span class="text-red-500">*</span>
-                        </label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-                    <div id="loginSection">
-                        <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Password <span class="text-red-500">*</span>
-                        </label>
-                        <input type="password" id="password" name="password" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <p id="passwordHint" class="text-xs text-gray-500 mt-1">Enter your password to login (if existing user) or create a new password (if new user)</p>
-                        <div id="userStatus" class="mt-2 hidden">
-                            <span id="userStatusText" class="text-sm font-medium"></span>
-                        </div>
-                    </div>
-                </div>
-                @endauth
-
-                <div>
-                    <label for="specialRequirements" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Special Requirements or Notes
-                    </label>
-                    <textarea id="specialRequirements" name="specialRequirements" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Any special requirements, dietary restrictions, accessibility needs, etc."></textarea>
-                </div>
-
-                <div class="flex items-center pt-4">
-                    <input type="checkbox" id="terms" name="terms" required class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
-                    <label for="terms" class="ml-2 text-sm text-gray-600">
-                        I agree to the <a href="/terms" class="text-blue-600 hover:underline">Terms and Conditions</a> and <a href="/privacy" class="text-blue-600 hover:underline">Privacy Policy</a>
-                    </label>
-                </div>
-            </form>
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="border-t border-gray-200 p-6 bg-gray-50 rounded-b-2xl">
-            <div class="flex justify-between items-center">
-                <button onclick="closeBookingModal()" class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all duration-300">
-                    Cancel
-                </button>
-                <button onclick="submitFinalBooking()" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
-                    Confirm Booking
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 @endsection
 
@@ -1409,9 +1239,6 @@
 @endpush
 
 @push('scripts')
-<!-- Google Maps JavaScript API -->
-<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key', 'YOUR_API_KEY') }}&libraries=places,directions&callback=initGoogleMap" async defer></script>
-
 <script>
     // Map locations with coordinates from database
     const locations = @json($locationsForMap);
@@ -1426,6 +1253,35 @@
     let directionsService;
     let directionsRenderer;
     let markers = [];
+    let routeEndpointMarkers = [];
+    let routeRequestId = 0;
+    let sharedMapInfoWindow = null;
+
+    window.lastCalculatedDistance = window.lastCalculatedDistance || null;
+    window.journeyRouteReady = false;
+    window.journeyEstimateReady = false;
+    function clearRouteEndpointMarkers() {
+        routeEndpointMarkers.forEach(m => m.setMap(null));
+        routeEndpointMarkers = [];
+    }
+
+    /** One InfoWindow for all markers: opening a new popup closes the previous. */
+    function openSharedMapInfoWindow(html, anchorMarker) {
+        if (!map || !anchorMarker || typeof google === 'undefined' || !google.maps) {
+            return;
+        }
+        if (!sharedMapInfoWindow) {
+            sharedMapInfoWindow = new google.maps.InfoWindow();
+        }
+        sharedMapInfoWindow.setContent(html);
+        sharedMapInfoWindow.open(map, anchorMarker);
+    }
+
+    function closeSharedMapInfoWindow() {
+        if (sharedMapInfoWindow) {
+            sharedMapInfoWindow.close();
+        }
+    }
     
     // Initialize Google Map
     function initGoogleMap() {
@@ -1465,6 +1321,8 @@
                 }
             });
             directionsRenderer.setMap(map);
+
+            map.addListener('click', () => closeSharedMapInfoWindow());
             
             // Add tourist attraction markers
             addTouristAttractions();
@@ -1510,12 +1368,8 @@
                         </div>
                     `;
                     
-                    const infoWindow = new google.maps.InfoWindow({
-                        content: infoContent
-                    });
-                    
                     marker.addListener('click', () => {
-                        infoWindow.open(map, marker);
+                        openSharedMapInfoWindow(infoContent, marker);
                     });
                     
                     markers.push(marker);
@@ -1644,8 +1498,8 @@
                 }
             });
             
-            const infoWindow = new google.maps.InfoWindow({
-                content: `
+            marker.addListener('click', () => {
+                openSharedMapInfoWindow(`
                     <div class="text-center min-w-[200px]">
                         <h3 class="font-semibold text-gray-900 mb-2">${attraction.name}</h3>
                         <p class="text-sm text-gray-600 mb-2">${attraction.type.charAt(0).toUpperCase() + attraction.type.slice(1)} Attraction</p>
@@ -1654,11 +1508,7 @@
                             <div><strong>Coordinates:</strong> ${attraction.position.lat.toFixed(4)}, ${attraction.position.lng.toFixed(4)}</div>
                         </div>
                     </div>
-                `
-            });
-            
-            marker.addListener('click', () => {
-                infoWindow.open(map, marker);
+                `, marker);
             });
             
             markers.push(marker);
@@ -1667,8 +1517,16 @@
     
     // Display primary route
     function displayRoute(response, pickupLocation, destinationLocation, travelMode) {
-        hideRouteLoading();
+        const curP = document.getElementById('pickupLocation').value;
+        const curD = document.getElementById('destinationLocation').value;
+        if (String(pickupLocation.id) !== String(curP) || String(destinationLocation.id) !== String(curD)) {
+            hideRouteLoading();
+            return;
+        }
         
+        hideRouteLoading();
+        window.journeyEstimateReady = false;
+            
         // Display the primary route
         directionsRenderer.setDirections(response);
         
@@ -1723,269 +1581,22 @@
         // Show Route Details section
         document.getElementById('routeInfo').classList.remove('hidden');
         
-        // Calculate and display price with error handling
+        // Store distance as soon as route is valid (so vehicle can be chosen afterward)
         if (leg && leg.distance && leg.distance.value) {
-            console.log('Calculating price with distance:', leg.distance.value);
-            
-            // Check if a vehicle is selected
-            const vehicleSelect = document.getElementById('vehicle');
-            const selectedVehicleId = vehicleSelect ? vehicleSelect.value : '';
-            
-            if (selectedVehicleId) {
-                // Vehicle is selected, calculate price
-                calculatePrice(pickupLocation.id, destinationLocation.id, leg.distance.value);
-            } else {
-                // No vehicle selected yet
-                console.log('No vehicle selected yet - price calculation will trigger when vehicle is selected');
-            }
+            window.lastCalculatedDistance = leg.distance.value;
+            window.journeyRouteReady = true;
         } else {
+            window.lastCalculatedDistance = null;
+            window.journeyRouteReady = false;
+        }
+
+        if (!leg || !leg.distance || !leg.distance.value) {
             console.error('Invalid distance data from route:', leg);
             showRouteNotification('Route calculated but unable to get distance. Please try again.', 'warning');
         }
-        
+
         // Show success notification
         showRouteNotification(`${travelMode.name} route calculated successfully!`, 'success');
-    }
-    
-    // Calculate price based on distance and selected vehicle
-    function calculatePrice(pickupLocationId, destinationLocationId, distanceInMeters) {
-        const vehicleSelect = document.getElementById('vehicle');
-        const selectedVehicleId = vehicleSelect.value;
-        
-        if (!selectedVehicleId) {
-            // Hide price display if no vehicle selected
-            document.getElementById('priceDisplay').classList.add('hidden');
-            return;
-        }
-        
-        // Convert meters to kilometers
-        const distanceInKm = distanceInMeters / 1000;
-        
-        // Store the distance for potential recalculation
-        window.lastCalculatedDistance = distanceInMeters;
-        
-        // Show loading state for price calculation
-        const priceDisplay = document.getElementById('priceDisplay');
-        priceDisplay.classList.remove('hidden');
-        priceDisplay.innerHTML = `
-            <div class="flex items-center justify-center py-4">
-                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-green-500 mr-3"></div>
-                <span class="text-gray-600 font-medium">Calculating price...</span>
-            </div>
-        `;
-        
-        // Make API request to calculate price using GET request
-        const params = new URLSearchParams({
-            pickup_location_id: pickupLocationId,
-            destination_location_id: destinationLocationId,
-            vehicle_id: selectedVehicleId,
-            distance: distanceInKm
-        });
-        
-        // Add timeout to fetch request
-        const timeoutId = setTimeout(() => {
-            console.error('Price calculation request timed out');
-            priceDisplay.innerHTML = `
-                <div class="text-center py-4">
-                    <div class="text-yellow-600 mb-2">
-                        <i class="fas fa-clock text-xl"></i>
-                    </div>
-                    <p class="text-sm text-gray-600">Calculation is taking longer than expected</p>
-                    <p class="text-xs text-gray-500 mt-1">Please wait...</p>
-                </div>
-            `;
-        }, 10000); // 10 second timeout
-        
-        fetch(`/vehicle-booking/calculate-price?${params}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            clearTimeout(timeoutId);
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            return response.json();
-        })
-        .then(data => {
-            console.log('Price calculation response:', data);
-            
-            if (data && data.success) {
-                if (data.data) {
-                    displayPrice(data.data);
-                } else {
-                    throw new Error('Invalid response data');
-                }
-            } else {
-                throw new Error(data.message || 'Failed to calculate price');
-            }
-        })
-        .catch(error => {
-            clearTimeout(timeoutId);
-            console.error('Price calculation error:', error);
-            console.error('Error details:', {
-                message: error.message,
-                stack: error.stack,
-                url: `/vehicle-booking/calculate-price?${params}`
-            });
-            
-            priceDisplay.innerHTML = `
-                <div class="text-center py-4">
-                    <div class="text-red-600 mb-2">
-                        <i class="fas fa-exclamation-triangle text-xl"></i>
-                    </div>
-                    <p class="text-sm text-gray-600">Unable to calculate price</p>
-                    <p class="text-xs text-gray-500 mt-1">Error: ${error.message}</p>
-                    <button onclick="calculatePrice('${pickupLocationId}', '${destinationLocationId}', ${distanceInMeters})" 
-                        class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-                        Retry
-                    </button>
-                </div>
-            `;
-        });
-    }
-    
-    // Show vehicle pricing information when vehicle is selected
-    function showVehiclePricing(selectedOption) {
-        console.log('showVehiclePricing called with:', selectedOption);
-        
-        // Check if selectedOption exists
-        if (!selectedOption) {
-            console.error('selectedOption is null or undefined');
-            return;
-        }
-        
-        const vehicleId = selectedOption.value;
-        const vehicleName = selectedOption.textContent.split(' - ')[0];
-        
-        // Get pricing data from option attributes
-        const pricingType = selectedOption.getAttribute('data-pricing-type');
-        const perKmPrice = selectedOption.getAttribute('data-per-km-price');
-        const firstKmPrice = selectedOption.getAttribute('data-first-km-price');
-        const per100mPrice = selectedOption.getAttribute('data-per-100m-price');
-        
-        console.log('Vehicle pricing data:', {
-            vehicleId,
-            vehicleName,
-            pricingType,
-            perKmPrice,
-            firstKmPrice,
-            per100mPrice
-        });
-        
-        const priceDisplay = document.getElementById('priceDisplay');
-        
-        // Check if priceDisplay element exists
-        if (!priceDisplay) {
-            console.error('priceDisplay element not found');
-            return;
-        }
-        
-        priceDisplay.classList.remove('hidden');
-        
-        // Create pricing display based on vehicle pricing type
-        let pricingHtml = '';
-        
-        if (pricingType === 'first_km_meter') {
-            pricingHtml = `
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-lg font-semibold text-gray-900">${vehicleName} Pricing</h3>
-                    <div class="text-sm text-gray-600">First KM + Per 100m</div>
-                </div>
-                <div class="text-sm text-gray-600 space-y-2">
-                    <div class="flex justify-between items-center bg-blue-50 p-2 rounded">
-                        <span class="font-medium">First 1km:</span>
-                        <span class="font-semibold text-blue-600">LKR ${parseFloat(firstKmPrice || 0).toFixed(2)}</span>
-                    </div>
-                    <div class="flex justify-between items-center bg-green-50 p-2 rounded">
-                        <span class="font-medium">Per 100m after:</span>
-                        <span class="font-semibold text-green-600">LKR ${parseFloat(per100mPrice || 0).toFixed(2)}</span>
-                    </div>
-                </div>
-                <div class="mt-3 pt-3 border-t border-gray-200">
-                    <div class="flex items-center text-xs text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        <span>Select pickup and destination to see total price</span>
-                    </div>
-                </div>
-            `;
-        } else {
-            pricingHtml = `
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-lg font-semibold text-gray-900">${vehicleName} Pricing</h3>
-                    <div class="text-sm text-gray-600">Per Kilometer</div>
-                </div>
-                <div class="text-sm text-gray-600 space-y-2">
-                    <div class="flex justify-between items-center bg-blue-50 p-2 rounded">
-                        <span class="font-medium">Per kilometer:</span>
-                        <span class="font-semibold text-blue-600">LKR ${parseFloat(perKmPrice || 0).toFixed(2)}</span>
-                    </div>
-                </div>
-                <div class="mt-3 pt-3 border-t border-gray-200">
-                    <div class="flex items-center text-xs text-gray-500">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        <span>Select pickup and destination to see total price</span>
-                    </div>
-                </div>
-            `;
-        }
-        
-        priceDisplay.innerHTML = pricingHtml;
-        
-        // Add animation
-        priceDisplay.style.transform = 'scale(1.02)';
-        setTimeout(() => {
-            priceDisplay.style.transform = 'scale(1)';
-        }, 200);
-    }
-    
-    // Display calculated price
-    function displayPrice(priceData) {
-        const priceDisplay = document.getElementById('priceDisplay');
-        const totalPrice = document.getElementById('totalPrice');
-        const priceBreakdown = document.getElementById('priceBreakdown');
-        
-        // Check if priceDisplay element exists
-        if (!priceDisplay) {
-            console.error('priceDisplay element not found');
-            return;
-        }
-        
-        // Generate price breakdown HTML
-        const breakdownHtml = priceData.price_breakdown.map(item => 
-            `<div class="flex justify-between">
-                <span>${item}</span>
-            </div>`
-        ).join('');
-        
-        // Show the price display with animation
-        priceDisplay.innerHTML = `
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg font-semibold text-gray-900">Estimated Price</h3>
-                <div class="text-2xl font-bold text-green-600">${priceData.formatted_price}</div>
-            </div>
-            <div class="text-sm text-gray-600 space-y-1">
-                ${breakdownHtml}
-            </div>
-            <div class="mt-3 pt-3 border-t border-green-200">
-                <div class="flex items-center text-xs text-gray-500">
-                    <i class="fas fa-info-circle mr-1"></i>
-                    <span>Price calculated based on distance and selected vehicle</span>
-                </div>
-            </div>
-        `;
-        
-        // Add success animation
-        priceDisplay.style.transform = 'scale(1.02)';
-        setTimeout(() => {
-            priceDisplay.style.transform = 'scale(1)';
-        }, 200);
     }
     
     // Display alternative routes
@@ -2026,9 +1637,8 @@
                     title: `${routeData.travelMode.name} Route: ${leg.duration.text}`
                 });
                 
-                // Add click handler to show route details
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
+                infoMarker.addListener('click', () => {
+                    openSharedMapInfoWindow(`
                         <div class="text-center min-w-[200px]">
                             <h4 class="font-semibold text-gray-900 mb-2">${routeData.travelMode.name} Route</h4>
                             <div class="space-y-1 text-sm">
@@ -2046,11 +1656,7 @@
                                 </div>
                             </div>
                         </div>
-                    `
-                });
-                
-                infoMarker.addListener('click', () => {
-                    infoWindow.open(map, infoMarker);
+                    `, infoMarker);
                 });
             }
         });
@@ -2058,9 +1664,18 @@
     
     // Draw route using Google Maps Directions API
     function drawGoogleRoute(pickupLocationId, destinationLocationId) {
+        const requestId = ++routeRequestId;
         try {
+            if (typeof google === 'undefined' || !google.maps || !map || !directionsService || !directionsRenderer) {
+                hideRouteLoading();
+                showRouteNotification('Map is still loading. Please wait a moment and try again.', 'info');
+                return;
+            }
+            
             // Show loading state
             showRouteLoading();
+            closeSharedMapInfoWindow();
+            clearRouteEndpointMarkers();
             
             const pickupLocation = locationLookup[pickupLocationId];
             const destinationLocation = locationLookup[destinationLocationId];
@@ -2068,6 +1683,12 @@
             if (!pickupLocation || !destinationLocation) {
                 console.warn('Location not found in lookup');
                 hideRouteLoading();
+                return;
+            }
+            
+            if (String(pickupLocationId) === String(destinationLocationId)) {
+                hideRouteLoading();
+                showRouteNotification('Pickup and destination must be different locations.', 'error');
                 return;
             }
             
@@ -2108,9 +1729,7 @@
                 }
             });
             
-            // Add info windows for markers
-            const pickupInfoWindow = new google.maps.InfoWindow({
-                content: `
+            const pickupInfoHtml = `
                     <div class="text-center min-w-[200px]">
                         <div class="flex items-center justify-center mb-2">
                             <div class="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
@@ -2124,11 +1743,9 @@
                             <div><strong>Coordinates:</strong> ${pickupCoords.lat.toFixed(4)}, ${pickupCoords.lng.toFixed(4)}</div>
                         </div>
                     </div>
-                `
-            });
+                `;
             
-            const destinationInfoWindow = new google.maps.InfoWindow({
-                content: `
+            const destinationInfoHtml = `
                     <div class="text-center min-w-[200px]">
                         <div class="flex items-center justify-center mb-2">
                             <div class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-2">
@@ -2142,16 +1759,17 @@
                             <div><strong>Coordinates:</strong> ${destinationCoords.lat.toFixed(4)}, ${destinationCoords.lng.toFixed(4)}</div>
                         </div>
                     </div>
-                `
-            });
+                `;
             
             pickupMarker.addListener('click', () => {
-                pickupInfoWindow.open(map, pickupMarker);
+                openSharedMapInfoWindow(pickupInfoHtml, pickupMarker);
             });
             
             destinationMarker.addListener('click', () => {
-                destinationInfoWindow.open(map, destinationMarker);
+                openSharedMapInfoWindow(destinationInfoHtml, destinationMarker);
             });
+            
+            routeEndpointMarkers.push(pickupMarker, destinationMarker);
             
             // Request directions from Google Maps with multiple travel modes
             const travelModes = [
@@ -2170,6 +1788,9 @@
                     travelMode: travelMode.mode,
                     provideRouteAlternatives: true
                 }, (response, status) => {
+                    if (requestId !== routeRequestId) {
+                        return;
+                    }
                     routesCalculated++;
                     
                     if (status === 'OK') {
@@ -2188,9 +1809,18 @@
                         }
                     }
                     
-                    // When all routes are calculated, show alternatives
+                    // When all routes are calculated, show alternatives or surface errors
                     if (routesCalculated === totalRoutes) {
                         displayAlternativeRoutes(allRoutes, pickupLocation, destinationLocation);
+                        
+                        const distanceInfo = document.getElementById('distanceInfo');
+                        if (!distanceInfo || !distanceInfo.textContent) {
+                            hideRouteLoading();
+                            window.journeyRouteReady = false;
+                            window.lastCalculatedDistance = null;
+                            window.journeyEstimateReady = false;
+                            showRouteNotification('Could not calculate a route for these locations. Try different pickup or destination.', 'error');
+                        }
                     }
                 });
             });
@@ -2244,14 +1874,34 @@
         }
     }
     
-    // Handle location changes
-    function handleLocationChange() {
+    // After pickup/destination `<select>` sync (same-location rules), update the map route
+    function tryUpdateRouteFromForm() {
         const pickupLocationId = document.getElementById('pickupLocation').value;
         const destinationLocationId = document.getElementById('destinationLocation').value;
         
-        if (pickupLocationId && destinationLocationId) {
-            drawGoogleRoute(pickupLocationId, destinationLocationId);
+        if (!pickupLocationId || !destinationLocationId || pickupLocationId === destinationLocationId) {
+            hideRouteLoading();
+            if (directionsRenderer) {
+                directionsRenderer.setDirections({ routes: [] });
+            }
+            clearRouteEndpointMarkers();
+            closeSharedMapInfoWindow();
+            document.getElementById('routeInfo').classList.add('hidden');
+            window.lastCalculatedDistance = null;
+            window.journeyRouteReady = false;
+            window.journeyEstimateReady = false;
+            return;
         }
+        
+        if (typeof google === 'undefined' || !google.maps || !map || !directionsService) {
+            return;
+        }
+        
+        drawGoogleRoute(pickupLocationId, destinationLocationId);
+    }
+    
+    function scheduleRouteUpdateFromForm() {
+        setTimeout(tryUpdateRouteFromForm, 0);
     }
     
     // Show route notification
@@ -2304,19 +1954,29 @@
         if (directionsRenderer) {
             directionsRenderer.setDirections({ routes: [] });
         }
+        clearRouteEndpointMarkers();
+        closeSharedMapInfoWindow();
         
         // Hide route info
         document.getElementById('routeInfo').classList.add('hidden');
-        
-        // Hide price display
-        document.getElementById('priceDisplay').classList.add('hidden');
         
         // Reset form dropdowns
         document.getElementById('pickupLocation').value = '';
         document.getElementById('destinationLocation').value = '';
         
+        ['pickupLocation', 'destinationLocation'].forEach(id => {
+            const sel = document.getElementById(id);
+            if (sel) {
+                sel.querySelectorAll('option').forEach(option => {
+                    option.disabled = false;
+                });
+            }
+        });
+        
         // Clear stored distance
         window.lastCalculatedDistance = null;
+        window.journeyRouteReady = false;
+        window.journeyEstimateReady = false;
         
         // Reset to default view
         if (map) {
@@ -2328,473 +1988,102 @@
         showRouteNotification('Route cleared successfully', 'info');
     }
     
-    // Initialize everything when DOM is loaded
+    // Initialize booking form listeners when DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Make vehicles data available to JavaScript
-        window.vehiclesData = @json($vehicles);
-        
-        // Google Maps will initialize via callback
-        
-        // Set default date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('pickupDate').value = today;
-        
-        // Set default time to 8:00 AM
         document.getElementById('pickupTime').value = '08:00';
-        
-        // Add event listeners
-        document.getElementById('pickupLocation').addEventListener('change', handleLocationChange);
-        document.getElementById('destinationLocation').addEventListener('change', handleLocationChange);
-        
-        // Handle vehicle selection to update passenger count limit and show pricing
-        document.getElementById('vehicle').addEventListener('change', function() {
-            console.log('Vehicle change event triggered');
-            const selectedOption = this.options[this.selectedIndex];
-            console.log('Selected option:', selectedOption);
-            
-            if (!selectedOption) {
-                console.error('No option selected');
-                return;
-            }
-            
-            const maxPax = selectedOption.getAttribute('data-pax');
-            const paxInput = document.getElementById('paxCount');
-            
-            if (maxPax) {
-                paxInput.max = maxPax;
-                paxInput.min = 1;
-                paxInput.placeholder = `1-${maxPax} passengers`;
-                
-                // If current value exceeds new max, adjust it
-                if (parseInt(paxInput.value) > parseInt(maxPax)) {
-                    paxInput.value = maxPax;
-                    showRouteNotification(`Passenger count adjusted to ${maxPax} (vehicle capacity)`, 'info');
-                }
-                
-                // Add visual feedback
-                paxInput.style.borderColor = '#10b981';
-                paxInput.style.backgroundColor = '#f0fdf4';
-                
-                // Show vehicle capacity info
-                const vehicleInfo = document.getElementById('vehicleInfo');
-                if (vehicleInfo) {
-                    vehicleInfo.textContent = `Maximum ${maxPax} passengers for selected vehicle`;
-                    vehicleInfo.className = 'text-sm text-green-600 mt-1';
-                }
-                
-                // Show vehicle pricing information immediately
-                showVehiclePricing(selectedOption);
-                
-                // Recalculate price if route is already displayed
-                const pickupLocationId = document.getElementById('pickupLocation').value;
-                const destinationLocationId = document.getElementById('destinationLocation').value;
-                
-                // Check if route is displayed by checking if routeInfo is visible
-                const routeInfo = document.getElementById('routeInfo');
-                const isRouteDisplayed = routeInfo && !routeInfo.classList.contains('hidden');
-                
-                if (pickupLocationId && destinationLocationId) {
-                    if (window.lastCalculatedDistance && isRouteDisplayed) {
-                        // Calculate price using stored distance
-                        console.log('Recalculating price after vehicle change');
-                        calculatePrice(pickupLocationId, destinationLocationId, window.lastCalculatedDistance);
-                    } else {
-                        // Check if there's a route info but not calculated yet
-                        console.log('Waiting for route distance to be calculated');
-                    }
-                }
-            } else {
-                paxInput.max = 20;
-                paxInput.min = 1;
-                paxInput.placeholder = '1-20 passengers';
-                paxInput.style.borderColor = '#d1d5db';
-                paxInput.style.backgroundColor = '#ffffff';
-                
-                const vehicleInfo = document.getElementById('vehicleInfo');
-                if (vehicleInfo) {
-                    vehicleInfo.textContent = 'Please select a vehicle to see passenger capacity';
-                    vehicleInfo.className = 'text-sm text-gray-500 mt-1';
-                }
-                
-                // Hide pricing when no vehicle selected
-                document.getElementById('priceDisplay').classList.add('hidden');
-            }
-        });
-        
-        // Add real-time validation for passenger input
-        document.getElementById('paxCount').addEventListener('input', function() {
-            const vehicleSelect = document.getElementById('vehicle');
-            const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
-            const maxPax = selectedOption.getAttribute('data-pax');
-            const currentValue = parseInt(this.value);
-            
-            if (maxPax && currentValue > parseInt(maxPax)) {
-                this.style.borderColor = '#ef4444';
-                this.style.backgroundColor = '#fef2f2';
-                
-                // Show error message
-                const errorMsg = document.getElementById('paxError');
-                if (errorMsg) {
-                    errorMsg.textContent = `Maximum ${maxPax} passengers allowed for selected vehicle`;
-                    errorMsg.className = 'text-sm text-red-600 mt-1';
-                }
-            } else if (maxPax && currentValue <= parseInt(maxPax) && currentValue >= 1) {
-                this.style.borderColor = '#10b981';
-                this.style.backgroundColor = '#f0fdf4';
-                
-                // Hide error message
-                const errorMsg = document.getElementById('paxError');
-                if (errorMsg) {
-                    errorMsg.textContent = '';
-                    errorMsg.className = 'hidden';
-                }
-            } else {
-                this.style.borderColor = '#d1d5db';
-                this.style.backgroundColor = '#ffffff';
-            }
-        });
-        
-        // Prevent same location selection for pickup and destination
+
         const pickupSelect = document.getElementById('pickupLocation');
         const destinationSelect = document.getElementById('destinationLocation');
-        
+
         function updateDestinationOptions() {
             const selectedPickup = pickupSelect.value;
             const options = destinationSelect.querySelectorAll('option');
-            
+
             options.forEach(option => {
                 if (option.value === '') {
                     option.disabled = false;
                 } else if (option.value === selectedPickup) {
                     option.disabled = true;
-                    option.style.display = 'none';
                 } else {
                     option.disabled = false;
-                    option.style.display = 'block';
                 }
             });
-            
-            // If destination is same as pickup, reset it
+
             if (destinationSelect.value === selectedPickup) {
                 destinationSelect.value = '';
             }
         }
-        
+
         function updatePickupOptions() {
             const selectedDestination = destinationSelect.value;
             const options = pickupSelect.querySelectorAll('option');
-            
+
             options.forEach(option => {
                 if (option.value === '') {
                     option.disabled = false;
                 } else if (option.value === selectedDestination) {
                     option.disabled = true;
-                    option.style.display = 'none';
                 } else {
                     option.disabled = false;
-                    option.style.display = 'block';
                 }
             });
-            
-            // If pickup is same as destination, reset it
+
             if (pickupSelect.value === selectedDestination) {
                 pickupSelect.value = '';
             }
         }
-        
-        pickupSelect.addEventListener('change', updateDestinationOptions);
-        destinationSelect.addEventListener('change', updatePickupOptions);
-        
-        // Handle form submission
+
+        pickupSelect.addEventListener('change', function() {
+            updateDestinationOptions();
+            scheduleRouteUpdateFromForm();
+        });
+        destinationSelect.addEventListener('change', function() {
+            updatePickupOptions();
+            scheduleRouteUpdateFromForm();
+        });
+
+        const vehicleResultsUrl = @json(route('vehicle.booking.vehicles'));
+
         document.getElementById('bookingForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
-            
-            // Validate passenger count against vehicle capacity
-            const vehicleSelect = document.getElementById('vehicle');
-            const selectedOption = vehicleSelect.options[vehicleSelect.selectedIndex];
-            const maxPax = selectedOption.getAttribute('data-pax');
-            const passengerCount = parseInt(data.paxCount);
-            
-            if (maxPax && passengerCount > parseInt(maxPax)) {
-                showRouteNotification(`Error: Maximum ${maxPax} passengers allowed for selected vehicle`, 'error');
-                document.getElementById('paxCount').focus();
-                return false;
+
+            if (!data.pickupLocation || !data.destinationLocation) {
+                showRouteNotification('Please select both pickup location and destination.', 'error');
+                return;
             }
-            
-            if (data.pickupLocation && data.destinationLocation) {
-                // Get vehicle name for display
-                const vehicleName = selectedOption.textContent;
-                
-                // Prepare booking data
-                const bookingData = {
-                    pickupLocation: data.pickupLocation,
-                    destinationLocation: data.destinationLocation,
-                    pickupDate: data.pickupDate,
-                    pickupTime: data.pickupTime,
-                    vehicle: vehicleName,
-                    vehicleId: data.vehicle,
-                    passengers: data.paxCount,
-                    locationIds: {
-                        pickup: data.pickupLocation,
-                        destination: data.destinationLocation
-                    }
-                };
-                
-                // Show booking modal instead of alert
-                showBookingModal(bookingData);
-                document.getElementById('pickupDate').value = today;
-                document.getElementById('pickupTime').value = '08:00';
-                document.getElementById('routeInfo').classList.add('hidden');
-                
-                // Clear Google Maps directions
-                if (directionsRenderer) {
-                    directionsRenderer.setDirections({ routes: [] });
-                }
-                
-                // Reset map view
-                if (map) {
-                    map.setCenter({ lat: 7.8731, lng: 80.7718 });
-                    map.setZoom(7);
-                }
-                
-                showRouteNotification('Booking submitted successfully!', 'success');
-            } else {
-                showRouteNotification('Please select both pickup and destination locations', 'error');
+
+            if (data.pickupLocation === data.destinationLocation) {
+                showRouteNotification('Pickup and destination must be different locations.', 'error');
+                return;
             }
+
+            if (!data.pickupDate || !data.pickupTime) {
+                showRouteNotification('Please choose pickup date and time.', 'error');
+                return;
+            }
+
+            if (!window.journeyRouteReady || !window.lastCalculatedDistance) {
+                showRouteNotification('Wait until the route appears on the map, then try again.', 'error');
+                return;
+            }
+
+            const km = (window.lastCalculatedDistance / 1000).toFixed(4);
+            const params = new URLSearchParams({
+                pickup_location_id: data.pickupLocation,
+                destination_location_id: data.destinationLocation,
+                distance: km,
+                pickup_date: data.pickupDate,
+                pickup_time: data.pickupTime,
+            });
+            window.location.href = vehicleResultsUrl + '?' + params.toString();
         });
     });
-    
-    // ==============================================
-    // BOOKING MODAL FUNCTIONS
-    // ==============================================
-    
-    // Store booking data globally
-    window.currentBookingData = null;
-    
-    // Show booking modal with booking data
-    function showBookingModal(bookingData) {
-        console.log('Showing booking modal with data:', bookingData);
-        
-        // Store booking data globally
-        window.currentBookingData = bookingData;
-        
-        // Get modal element
-        const modal = document.getElementById('bookingModal');
-        
-        if (!modal) {
-            console.error('Booking modal not found');
-            return;
-        }
-        
-        // Populate booking summary
-        const summary = document.getElementById('bookingSummary');
-        if (summary) {
-            summary.innerHTML = `
-                <div><strong>Route:</strong> ${bookingData.pickupLocation} → ${bookingData.destinationLocation}</div>
-                <div><strong>Date & Time:</strong> ${bookingData.pickupDate} at ${bookingData.pickupTime}</div>
-                <div><strong>Vehicle:</strong> ${bookingData.vehicle}</div>
-                <div><strong>Passengers:</strong> ${bookingData.passengers}</div>
-            `;
-        }
-        
-        // Show modal with animation
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        
-        // Focus on first input
-        setTimeout(() => {
-            const firstInput = document.getElementById('fullName');
-            if (firstInput) {
-                firstInput.focus();
-            }
-        }, 100);
-    }
-    
-    // Close booking modal
-    function closeBookingModal() {
-        const modal = document.getElementById('bookingModal');
-        if (modal) {
-            modal.classList.remove('flex');
-            modal.classList.add('hidden');
-            window.currentBookingData = null;
-        }
-    }
-    
-    // Submit final booking
-    async function submitFinalBooking() {
-        console.log('Submitting final booking...');
-        
-        if (!window.currentBookingData) {
-            console.error('No booking data available');
-            showRouteNotification('Error: Booking data not found. Please try again.', 'error');
-            return;
-        }
-        
-        // Get form data
-        const form = document.getElementById('finalBookingForm');
-        if (!form) {
-            console.error('Final booking form not found');
-            return;
-        }
-        
-        const formData = new FormData(form);
-        const bookingDetails = Object.fromEntries(formData);
-        
-        // Check if terms are accepted
-        if (!document.getElementById('terms').checked) {
-            showRouteNotification('Please accept the terms and conditions to proceed.', 'error');
-            return;
-        }
-        
-        // Combine booking data
-        const completeBookingData = {
-            ...window.currentBookingData,
-            customerDetails: {
-                fullName: bookingDetails.fullName,
-                email: bookingDetails.email,
-                phone: bookingDetails.phoneNumber,
-                password: bookingDetails.password,
-                specialRequirements: bookingDetails.specialRequirements
-            }
-        };
-        
-        console.log('Complete booking data:', completeBookingData);
-        
-        // Show loading state
-        const submitButton = event.target;
-        const originalText = submitButton.textContent;
-        submitButton.disabled = true;
-        submitButton.textContent = 'Submitting...';
-        
-        try {
-            // Submit booking to backend
-            const response = await fetch('/vehicle-booking/submit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify(completeBookingData)
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok && data.success) {
-                // Success!
-                showRouteNotification('Booking submitted successfully! Redirecting to payment...', 'success');
-                
-                // Close modal
-                closeBookingModal();
-                
-                // Redirect to payment gateway
-                if (data.payment_url) {
-                    setTimeout(() => {
-                        window.location.href = data.payment_url;
-                    }, 1000);
-                } else {
-                    // Fallback: reload page
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                }
-            } else {
-                // Error from server
-                throw new Error(data.message || 'Failed to submit booking');
-            }
-        } catch (error) {
-            console.error('Error submitting booking:', error);
-            showRouteNotification('Error: ' + error.message + '. Please try again.', 'error');
-        } finally {
-            // Restore button
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-        }
-    }
-    
-    // Close modal when clicking outside
-    document.addEventListener('click', function(event) {
-        const modal = document.getElementById('bookingModal');
-        if (event.target === modal) {
-            closeBookingModal();
-        }
-    });
-    
-    // Close modal on escape key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') {
-            closeBookingModal();
-        }
-    });
-    
-    // Check if user exists when email is entered
-    async function checkUserExists(email) {
-        if (!email) {
-            hideUserStatus();
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/check-user?email=${encodeURIComponent(email)}`, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json'
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (data.exists) {
-                showUserStatus('Existing user - enter your password to login', 'blue');
-            } else {
-                showUserStatus('New user - create a password', 'green');
-            }
-        } catch (error) {
-            console.error('Error checking user:', error);
-            hideUserStatus();
-        }
-    }
-    
-    // Show user status message
-    function showUserStatus(message, color) {
-        const statusDiv = document.getElementById('userStatus');
-        const statusText = document.getElementById('userStatusText');
-        
-        if (statusDiv && statusText) {
-            statusDiv.classList.remove('hidden');
-            statusText.textContent = message;
-            statusText.className = `text-sm font-medium text-${color}-600`;
-        }
-    }
-    
-    // Hide user status message
-    function hideUserStatus() {
-        const statusDiv = document.getElementById('userStatus');
-        if (statusDiv) {
-            statusDiv.classList.add('hidden');
-        }
-    }
-    
-    // Add email change listener to check user existence
-    document.addEventListener('DOMContentLoaded', function() {
-        const emailInput = document.getElementById('email');
-        if (emailInput) {
-            emailInput.addEventListener('blur', function() {
-                const email = this.value.trim();
-                if (email && email.includes('@')) {
-                    checkUserExists(email);
-                } else {
-                    hideUserStatus();
-                }
-            });
-        }
-    });
-    
-    // ==============================================
-    // END BOOKING MODAL FUNCTIONS
+
     // ==============================================
     
     // Initialize Swiper
@@ -2858,5 +2147,10 @@
             });
         });
     });
+
+    // Expose for Google Maps JS callback (must be on window before loader script runs)
+    window.initGoogleMap = initGoogleMap;
 </script>
+<!-- Google Maps JavaScript API: load after initGoogleMap is defined; DirectionsService is core API (not a "directions" library) -->
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.key', 'YOUR_API_KEY') }}&loading=async&libraries=places&callback=initGoogleMap" async defer></script>
 @endpush

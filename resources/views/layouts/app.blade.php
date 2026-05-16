@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Ceylon Mirissa - Discover Paradise')</title>
-    <meta name="description" content="@yield('description', 'Experience the magic of Sri Lanka with Ceylon Mirissa. Discover ancient temples, pristine beaches, and unforgettable adventures.')">
-    
+    <title>@yield('title', 'Mirissawaves - Discover Paradise')</title>
+    <meta name="description" content="@yield('description', 'Experience the magic of Sri Lanka with Mirissawaves. Discover ancient temples, pristine beaches, and unforgettable adventures.')">
+    <link rel="icon" href="{{ asset('logo.png') }}" type="image/png">
+
     @stack('head')
 
     <!-- Tailwind CSS -->
@@ -30,6 +31,7 @@
 
     <!-- FontAwesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('css/customer-mobile.css') }}" rel="stylesheet">
 
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
@@ -195,13 +197,13 @@
             z-index: 9999 !important;
         }
 
-        .navbar .flex {
+        .navbar-inner {
             flex-wrap: nowrap;
             align-items: center;
         }
 
-        .navbar .hidden.lg\\:flex {
-            flex-shrink: 0;
+        .navbar-desktop-nav {
+            flex-shrink: 1;
         }
 
         .navbar.scrolled {
@@ -271,48 +273,34 @@
                 top: 0;
                 height: 100vh;
             }
-            
+
             .navbar {
                 height: 56px;
             }
-            
+
             .navbar .container {
                 height: 56px;
             }
-            
-            .navbar .flex {
+
+            .navbar-inner {
                 height: 56px;
             }
-            
-            .logo-icon {
-                width: 32px;
-                height: 32px;
-            }
-            
-            .logo-icon svg {
-                width: 16px;
-                height: 16px;
-            }
-            
-            .navbar h1 {
-                font-size: 1rem;
-            }
-            
-            .navbar p {
-                font-size: 0.625rem;
+
+            .navbar .site-logo {
+                height: 3.25rem !important;
             }
         }
 
-        @media (min-width: 641px) and (max-width: 1024px) {
+        @media (min-width: 641px) and (max-width: 1023px) {
             .mobile-menu {
                 width: 320px;
             }
-            
+
             /* Hide desktop nav on tablet and show mobile menu button */
-            .navbar .hidden.lg\\:flex {
+            .navbar-desktop-nav {
                 display: none !important;
             }
-            
+
             .mobile-menu-btn {
                 display: block !important;
             }
@@ -341,12 +329,13 @@
             background: #94a3b8;
         }
 
-        .logo-icon {
-            transition: all 0.3s ease;
+        .site-logo {
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        .logo-icon:hover {
-            transform: scale(1.1) rotate(5deg);
+        a:hover .site-logo {
+            transform: scale(1.03);
+            opacity: 0.92;
         }
 
         /* Side Package Card */
@@ -394,24 +383,13 @@
 <body class="font-rounded">
     <!-- Navigation -->
     <nav class="navbar fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div class="container mx-auto px-6">
-            <div class="flex items-center justify-between h-16 lg:h-16 md:h-14 sm:h-14">
+        <div class="container mx-auto px-4 sm:px-6 customer-container">
+            <div class="navbar-inner flex items-center justify-between w-full gap-3 lg:gap-4">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <div class="logo-icon w-8 h-8 bg-gradient-to-br from-blue-500 to-green-500 rounded-lg flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-gray-900 playfair">Ceylon Mirissa</h1>
-                        <p class="text-xs text-gray-600 font-medium">Discover Paradise</p>
-                    </div>
-                </div>
+                <x-site-logo href="{{ route('home') }}" height="2.5rem" class="logo-icon shrink-0" />
 
                 <!-- Desktop Navigation -->
-                <div class="hidden lg:flex items-center space-x-6">
+                <div class="navbar-desktop-nav hidden lg:flex items-center">
                     <a href="{{ route('home') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium text-sm transition-all duration-300 {{ request()->routeIs('home') ? 'text-blue-600' : '' }}">Home</a>
                     <a href="{{ route('about') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium text-sm transition-all duration-300 {{ request()->routeIs('about') ? 'text-blue-600' : '' }}">About</a>
                     <a href="{{ route('packages') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium text-sm transition-all duration-300 {{ request()->routeIs('packages') ? 'text-blue-600' : '' }}">Packages</a>
@@ -421,8 +399,8 @@
                     <!-- Search Bar -->
                     <div class="relative search-container">
                         <div class="relative flex">
-                            <input type="text" id="search-input" placeholder="Search packages, blogs..." 
-                                   class="w-48 px-3 py-1.5 pl-8 pr-10 text-sm border border-gray-300 rounded-l-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
+                            <input type="text" id="search-input" placeholder="Search..."
+                                   class="navbar-search-input w-36 xl:w-48 px-3 py-1.5 pl-8 pr-10 text-sm border border-gray-300 rounded-l-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -439,7 +417,7 @@
                                 </svg>
                             </button>
                         </div>
-                        
+
                         <!-- Search Suggestions Dropdown -->
                         <div id="search-suggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 hidden z-50 max-h-96 overflow-y-auto">
                             <div id="search-results" class="py-2">
@@ -455,7 +433,7 @@
                                 <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center">
                                     <span class="text-white text-sm font-semibold">{{ substr(auth()->user()->name, 0, 1) }}</span>
                                 </div>
-                                <span>{{ auth()->user()->name }}</span>
+                                <span class="navbar-user-name">{{ auth()->user()->name }}</span>
                                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
@@ -507,14 +485,14 @@
                     @else
                         <!-- Guest Navigation -->
                         <a href="{{ route('login') }}" class="nav-link text-gray-700 hover:text-blue-600 font-medium text-sm transition-all duration-300 {{ request()->routeIs('login') ? 'text-blue-600' : '' }}">Login</a>
-                        <a href="{{ route('register') }}" class="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-4 py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ripple">
+                        <a href="{{ route('register') }}" class="shrink-0 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg ripple whitespace-nowrap">
                             Book your adventure
                         </a>
                     @endauth
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="mobile-menu-btn lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-all duration-300" onclick="toggleMobileMenu()">
+                <button class="mobile-menu-btn lg:hidden p-3 rounded-lg hover:bg-gray-100 transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center" onclick="toggleMobileMenu()" aria-label="Open menu">
                     <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -523,9 +501,9 @@
 
             <!-- Mobile Menu Overlay -->
             <div class="mobile-menu-overlay lg:hidden"></div>
-            
+
             <!-- Mobile Menu -->
-            <div class="mobile-menu fixed top-16 lg:top-16 md:top-14 sm:top-14 right-0 w-80 h-full shadow-2xl z-40 lg:hidden">
+            <div class="mobile-menu fixed right-0 w-full max-w-sm shadow-2xl z-40 lg:hidden">
                 <!-- Mobile Menu Header -->
                 <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
                     <h3 class="text-lg font-semibold text-gray-900">Menu</h3>
@@ -535,12 +513,12 @@
                         </svg>
                     </button>
                 </div>
-                
+
                 <div class="p-6 space-y-4 overflow-y-auto h-full pb-20">
                     <!-- Mobile Search Bar -->
                     <div class="mb-6">
                         <div class="relative flex">
-                            <input type="text" id="mobile-search-input" placeholder="Search..." 
+                            <input type="text" id="mobile-search-input" placeholder="Search..."
                                    class="flex-1 px-4 py-2 pl-10 pr-12 text-sm border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -684,7 +662,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="pt-16 lg:pt-16 md:pt-14 sm:pt-14">
+    <main class="site-main">
         <!-- Success/Error Messages -->
         @if(session('success'))
             <div class="fixed top-20 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 animate-slide-in-right" id="success-message">
@@ -712,23 +690,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-16">
-        <div class="container mx-auto px-6">
+    <footer class="bg-gray-900 text-white py-10 sm:py-16">
+        <div class="container mx-auto px-4 sm:px-6 customer-container">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Company Info -->
                 <div class="space-y-4">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-green-500 rounded-xl flex items-center justify-center">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold playfair">Ceylon Mirissa</h3>
-                            <p class="text-sm text-gray-400">Discover Paradise</p>
-                        </div>
-                    </div>
+                    <x-site-logo href="{{ route('home') }}" height="3rem" />
                     <p class="text-gray-400 text-sm leading-relaxed">
                         Experience the magic of Sri Lanka with our exclusive tour packages. From ancient temples to pristine beaches, we create unforgettable memories.
                     </p>
@@ -771,13 +738,13 @@
                             <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                             </svg>
-                            <span class="text-gray-400 text-sm">+94 77 123 4567</span>
+                            <span class="text-gray-400 text-sm">+94 77 552 3939</span>
                         </div>
                         <div class="flex items-center space-x-3">
                             <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
-                            <span class="text-gray-400 text-sm">info@ceylonmirissa.com</span>
+                            <span class="text-gray-400 text-sm">info@mirissawaves.com</span>
                         </div>
                     </div>
                 </div>
@@ -785,92 +752,28 @@
 
             <div class="border-t border-gray-800 mt-12 pt-8 text-center">
                 <p class="text-gray-400 text-sm">
-                    © {{ date('Y') }} Ceylon Mirissa. All rights reserved. | Designed with ❤️ for Sri Lanka
+                    © {{ date('Y') }} Mirissawaves. All rights reserved. | Designed with ❤️ for Sri Lanka
                 </p>
             </div>
         </div>
     </footer>
 
-    <!-- Chat Button -->
-    <div id="chatButton" class="fixed bottom-6 right-6 z-50">
-        <button onclick="openChatModal()" class="chat-btn bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-            </svg>
-            <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center animate-pulse">
-                1
-            </div>
-        </button>
-        <div class="absolute bottom-16 right-0 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity duration-300">
-            Chat with us!
-        </div>
+    @if($whatsappUrl ?? null)
+    <!-- WhatsApp Button -->
+    <div id="chatButton" class="fixed bottom-6 right-6 z-50 group">
+        <a href="{{ $whatsappUrl }}"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="chat-btn flex items-center justify-center w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full shadow-2xl transition-all duration-300 transform hover:scale-110"
+           aria-label="Chat on WhatsApp (opens in new tab)"
+           title="Chat on WhatsApp">
+            <i class="fab fa-whatsapp text-3xl" aria-hidden="true"></i>
+        </a>
+        <span class="pointer-events-none absolute bottom-16 right-0 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+            Chat on WhatsApp
+        </span>
     </div>
-
-    <!-- Chat Modal -->
-    <div id="chatModal" class="fixed inset-0 z-[10000] hidden">
-        <div class="chat-modal absolute inset-0 bg-black bg-opacity-50 flex items-end justify-end p-4">
-            <div class="chat-window bg-white rounded-t-2xl shadow-2xl w-full max-w-md h-96 flex flex-col">
-                <!-- Chat Header -->
-                <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-semibold">Ceylon Mirissa Support</h3>
-                            <p class="text-sm opacity-90">Online now</p>
-                        </div>
-                    </div>
-                    <button onclick="closeChatModal()" class="text-white hover:text-gray-200 transition-colors duration-300">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Chat Messages -->
-                <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-4">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                        </div>
-                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                            <p class="text-gray-800 text-sm">Hello! Welcome to Ceylon Mirissa! 🌴 How can I help you plan your perfect Sri Lankan adventure today?</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Options -->
-                <div class="p-4 border-t border-gray-200">
-                    <div class="flex flex-wrap gap-2 mb-3">
-                        <button onclick="sendQuickMessage('I want to book a tour')" class="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-sm hover:bg-blue-100 transition-colors duration-300">
-                            Book a Tour
-                        </button>
-                        <button onclick="sendQuickMessage('Tell me about packages')" class="bg-green-50 text-green-600 px-3 py-1 rounded-full text-sm hover:bg-green-100 transition-colors duration-300">
-                            Packages
-                        </button>
-                        <button onclick="sendQuickMessage('What are the prices?')" class="bg-purple-50 text-purple-600 px-3 py-1 rounded-full text-sm hover:bg-purple-100 transition-colors duration-300">
-                            Prices
-                        </button>
-                    </div>
-
-                    <!-- Chat Input -->
-                    <div class="flex items-center space-x-2">
-                        <input type="text" id="chatInput" placeholder="Type your message..." class="flex-1 border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" onkeypress="handleChatKeyPress(event)">
-                        <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-green-600 text-white p-2 rounded-full hover:from-blue-700 hover:to-green-700 transition-all duration-300">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    @endif
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -881,7 +784,7 @@
         function toggleMobileMenu() {
             const mobileMenu = document.querySelector('.mobile-menu');
             const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-            
+
             mobileMenu.classList.toggle('active');
             mobileMenuOverlay.classList.toggle('active');
         }
@@ -903,7 +806,7 @@
             if (event.key === 'Escape') {
                 const mobileMenu = document.querySelector('.mobile-menu');
                 const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-                
+
                 mobileMenu.classList.remove('active');
                 mobileMenuOverlay.classList.remove('active');
             }
@@ -933,108 +836,6 @@
             });
         });
 
-        // Chat functionality
-        function openChatModal() {
-            document.getElementById('chatModal').classList.remove('hidden');
-            document.getElementById('chatInput').focus();
-        }
-
-        function closeChatModal() {
-            document.getElementById('chatModal').classList.add('hidden');
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            if (message) {
-                addUserMessage(message);
-                input.value = '';
-
-                // Simulate bot response
-                setTimeout(() => {
-                    const response = getBotResponse(message);
-                    addBotResponse(response);
-                }, 1000);
-            }
-        }
-
-        function sendQuickMessage(message) {
-            addUserMessage(message);
-            setTimeout(() => {
-                const response = getBotResponse(message);
-                addBotResponse(response);
-            }, 1000);
-        }
-
-        function addUserMessage(message) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'flex items-start space-x-3 justify-end';
-            messageDiv.innerHTML = `
-                <div class="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-2xl rounded-tr-sm p-3 max-w-xs">
-                    <p class="text-sm">${message}</p>
-                </div>
-                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                </div>
-            `;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function addBotResponse(response) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'flex items-start space-x-3';
-            messageDiv.innerHTML = `
-                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                </div>
-                <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-3 max-w-xs">
-                    <p class="text-gray-800 text-sm">${response}</p>
-                </div>
-            `;
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function getBotResponse(userMessage) {
-            const message = userMessage.toLowerCase();
-
-            if (message.includes('book') || message.includes('tour')) {
-                return "Great! We offer amazing tour packages including Sigiriya Heritage Tour ($89), Whale Watching Adventure ($65), Ella Rock Trekking ($45), Kandy Cultural Tour ($75), and Surfing Adventure ($199). Which one interests you most? 🏛️🐋🥾";
-            } else if (message.includes('package') || message.includes('packages')) {
-                return "We have 5 amazing packages: 1) Sigiriya Heritage Tour - UNESCO World Heritage Site, 2) Whale Watching Adventure - Blue whale sightings, 3) Ella Rock Trekking - Mountain views, 4) Kandy Cultural Tour - Sacred temples, 5) Surfing Adventure - Arugam Bay waves. Which destination calls to you? 🌴";
-            } else if (message.includes('price') || message.includes('cost')) {
-                return "Our packages range from $45-$199: Ella Rock Trekking ($45), Whale Watching ($65), Kandy Cultural Tour ($75), Sigiriya Heritage ($89), and Surfing Adventure ($199). All include professional guides and key features! 💰";
-            } else if (message.includes('help') || message.includes('info')) {
-                return "I'm here to help! You can ask about: 📍 Tour packages and destinations 💰 Pricing and duration 🏛️ Cultural sites like Sigiriya and Kandy 🐋 Wildlife experiences 🏄 Adventure activities. What would you like to know?";
-            } else if (message.includes('mirissa') || message.includes('sri lanka')) {
-                return "Mirissa is a beautiful coastal town in Sri Lanka! We specialize in showcasing the best of Sri Lanka including ancient Sigiriya, cultural Kandy, scenic Ella, whale watching, and surfing at Arugam Bay. Ready for an adventure? 🇱🇰";
-            } else if (message.includes('hello') || message.includes('hi')) {
-                return "Hello! Welcome to Ceylon Mirissa! 🌴 I'm excited to help you discover the magic of Sri Lanka. Are you looking for cultural experiences, adventure tours, or beach holidays?";
-            } else {
-                return "That's interesting! I'd love to help you plan your Sri Lankan adventure. We offer cultural tours, wildlife experiences, hiking adventures, and beach activities. What type of experience are you looking for? 🌟";
-            }
-        }
-
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        }
-
-        // Close chat modal when clicking outside
-        document.getElementById('chatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeChatModal();
-            }
-        });
-
         // Auto-hide success/error messages
         setTimeout(function() {
             const successMessage = document.getElementById('success-message');
@@ -1062,7 +863,7 @@
         if (searchInput) {
             searchInput.addEventListener('input', function() {
                 const query = this.value.trim();
-                
+
                 // Show/hide clear button
                 if (query.length > 0) {
                     searchClear.classList.remove('hidden');
@@ -1261,6 +1062,8 @@
             searchSuggestions.classList.remove('hidden');
         }
     </script>
+
+    @include('components.startup-offers-popup')
 
     @stack('scripts')
 </body>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Booking Details - Ceylon Mirissa')
+@section('title', 'Booking Details - Mirissawaves')
 @section('description', 'View detailed information about your tour booking.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-[40vh] flex items-center justify-center overflow-hidden pt-20">
+<section class="relative page-hero flex items-center justify-center overflow-hidden min-h-[32vh] sm:min-h-[38vh]">
     <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ $booking->package?->image_url ?? ($booking->vehicle?->image_url ?? 'https://images.unsplash.com/photo-1551632811-561732d7e918?w=1920') }}');">
         <div class="absolute inset-0 bg-gradient-to-r from-blue-900/70 to-green-900/70"></div>
     </div>
@@ -25,9 +25,9 @@
 
 <!-- Booking Details Section -->
 <section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                 <!-- Main Content -->
                 <div class="lg:col-span-2 space-y-6">
                     @if($booking->package)
@@ -360,13 +360,13 @@
                         <div class="p-6">
                             <p class="text-sm text-gray-600 mb-4">Have questions about your booking? Our support team is here to help!</p>
                             <div class="space-y-2">
-                                <a href="tel:+94771234567" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                                <a href="tel:+94775523939" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-phone mr-2"></i>
-                                    +94 77 123 4567
+                                    +94 77 552 3939
                                 </a>
-                                <a href="mailto:info@ceylonmirissa.com" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+                                <a href="mailto:info@mirissawaves.com" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-envelope mr-2"></i>
-                                    info@ceylonmirissa.com
+                                    info@mirissawaves.com
                                 </a>
                             </div>
                         </div>

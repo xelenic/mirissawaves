@@ -20,7 +20,7 @@ class Booking extends Model
         'pickup_time',
         'travelers',
         'distance',
-        'special_requests',
+        'special_requirements',
         'total_amount',
         'status',
         'admin_notes',
@@ -29,6 +29,9 @@ class Booking extends Model
         'payment_reference',
         'payhere_order_id',
         'payhere_payment_id',
+        'confirmation_emailed_at',
+        'admin_order_notified_at',
+        'customer_order_notified_at',
         'booking_type',
     ];
 
@@ -37,7 +40,68 @@ class Booking extends Model
         'pickup_time' => 'datetime:H:i',
         'distance' => 'decimal:2',
         'total_amount' => 'decimal:2',
+        'confirmation_emailed_at' => 'datetime',
+        'admin_order_notified_at' => 'datetime',
+        'customer_order_notified_at' => 'datetime',
     ];
+
+    public function loadMailRelations(): self
+    {
+        return $this->loadMissing([
+            'package.category',
+            'vehicle',
+            'pickupLocation',
+            'destinationLocation',
+            'user',
+        ]);
+    }
+
+    public function getOrderTypeLabelAttribute(): string
+    {
+        if ($this->booking_type === 'vehicle' || $this->vehicle_id) {
+            return 'Vehicle transfer';
+        }
+
+        return 'Package tour';
+    }
+
+    public function isPackageBooking(): bool
+    {
+        return $this->package_id !== null && $this->booking_type !== 'vehicle';
+    }
+
+    public function isVehicleBooking(): bool
+    {
+        return $this->booking_type === 'vehicle' || $this->vehicle_id !== null;
+    }
+
+    public function getReferenceNumberAttribute(): string
+    {
+        return 'BK-'.str_pad((string) $this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+    public function getSummaryTitleAttribute(): string
+    {
+        if ($this->booking_type === 'vehicle' && $this->vehicle) {
+            return $this->vehicle->name;
+        }
+
+        if ($this->package) {
+            return $this->package->title;
+        }
+
+        return 'Tour booking';
+    }
+
+    /**
+     * Older views/controllers still read `special_requests`; DB column is `special_requirements`.
+     */
+    public function getSpecialRequestsAttribute(): ?string
+    {
+        $v = $this->attributes['special_requirements'] ?? null;
+
+        return $v !== null && $v !== '' ? (string) $v : null;
+    }
 
     public function package(): BelongsTo
     {

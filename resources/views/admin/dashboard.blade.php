@@ -164,7 +164,7 @@
                     @foreach($stats['recent_blogs'] as $blog)
                     <div class="flex items-center space-x-4">
                         <div class="flex-shrink-0">
-                            <img src="{{ $blog->featured_image_url }}" alt="{{ $blog->title }}" class="w-12 h-12 rounded-lg object-cover">
+                            <x-placeholder-image :src="$blog->featured_image_url" :alt="$blog->title" placeholder="blog" class="w-12 h-12 rounded-lg object-cover" />
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">{{ $blog->title }}</p>

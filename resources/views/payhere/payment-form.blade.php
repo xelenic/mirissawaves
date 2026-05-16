@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Payment - Ceylon Mirissa')
+@section('title', 'Payment - Mirissawaves')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
+<div class="payhere-page min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-gray-900 playfair mb-4">Complete Your Payment</h1>
-            <p class="text-lg text-gray-600">Secure payment powered by PayHere</p>
+            <h1 class="text-2xl sm:text-4xl font-bold text-gray-900 playfair mb-4">Complete Your Payment</h1>
+            <p class="text-lg text-gray-600">Secure payment powered by PayHere ({{ config('payhere.currency', 'USD') }})</p>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -112,7 +112,7 @@
                                 </svg>
                                 <div>
                                     <p class="font-semibold text-blue-900">PayHere Payment Gateway</p>
-                                    <p class="text-sm text-blue-700">Secure online payment processing</p>
+                                    <p class="text-sm text-blue-700">You will be charged in {{ config('payhere.currency', 'USD') }} (US dollars)</p>
                                 </div>
                             </div>
                         </div>

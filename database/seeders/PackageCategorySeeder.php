@@ -44,7 +44,10 @@ class PackageCategorySeeder extends Seeder
         ];
 
         foreach ($categories as $category) {
-            PackageCategory::create($category);
+            PackageCategory::updateOrCreate(
+                ['slug' => $category['slug']],
+                $category
+            );
         }
     }
 }

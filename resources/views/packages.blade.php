@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Tour Packages - Ceylon Mirissa')
+@section('title', 'Tour Packages - Mirissawaves')
 @section('description', 'Discover our amazing tour packages in Sri Lanka. From cultural heritage tours to wildlife adventures, we offer unforgettable experiences for every traveler.')
 
 @section('content')
 <!-- Hero Section -->
-<section class="relative h-64 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 overflow-hidden pt-20">
+<section class="relative page-hero py-10 sm:py-14 bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 overflow-hidden">
     <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="relative z-10 h-full flex items-center justify-center text-center text-white">
             <div class="max-w-4xl mx-auto">
                 <h1 class="text-3xl md:text-4xl font-bold playfair mb-4 animate-fade-in">
@@ -37,7 +37,7 @@
 
 <!-- Filter Section -->
 <section class="py-8 bg-gray-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="text-center mb-6">
             <h2 class="text-2xl font-bold text-gray-900 playfair mb-2">Find Your Perfect Adventure</h2>
             <p class="text-gray-600 max-w-2xl mx-auto text-sm">Filter our packages by category to find exactly what you're looking for</p>
@@ -58,7 +58,7 @@
 
 <!-- Packages Grid -->
 <section id="packages-grid" class="py-12 bg-white">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             @foreach($packages as $package)
@@ -194,9 +194,9 @@
 
 <!-- Why Choose Us Section -->
 <section class="py-16 bg-gradient-to-r from-blue-50 to-green-50">
-    <div class="container mx-auto px-6">
+    <div class="container mx-auto px-4 sm:px-6 customer-container">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900 playfair mb-4">Why Choose Ceylon Mirissa?</h2>
+            <h2 class="text-3xl font-bold text-gray-900 playfair mb-4">Why Choose Mirissawaves?</h2>
             <p class="text-gray-600 max-w-2xl mx-auto">We're committed to providing you with the best possible experience in Sri Lanka</p>
         </div>
         

@@ -1,20 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Login - Ceylon Mirissa')
-@section('description', 'Login to your Ceylon Mirissa account to access exclusive features and manage your bookings.')
+@section('title', 'Login - Mirissawaves')
+@section('description', 'Login to your Mirissawaves account to access exclusive features and manage your bookings.')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="auth-page min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
-            <div class="mx-auto h-16 w-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center mb-4">
-                <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
+            <div class="flex justify-center mb-4">
+                <x-site-logo href="{{ route('home') }}" height="4rem" />
             </div>
             <h2 class="text-3xl font-bold text-gray-900 playfair">Welcome Back</h2>
-            <p class="mt-2 text-sm text-gray-600">Sign in to your Ceylon Mirissa account</p>
+            <p class="mt-2 text-sm text-gray-600">Sign in to your Mirissawaves account</p>
         </div>
 
         <!-- Login Form -->

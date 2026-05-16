@@ -20,9 +20,9 @@ class AboutController extends Controller
         if (!$about) {
             // Return default content if no about page exists
             $about = (object) [
-                'title' => 'About Ceylon Mirissa Tours',
+                'title' => 'About Mirissawaves',
                 'subtitle' => 'Discover the Beauty of Sri Lanka with Us',
-                'content' => 'Welcome to Ceylon Mirissa Tours, your gateway to experiencing the incredible beauty and rich culture of Sri Lanka. We are passionate about providing unforgettable travel experiences that showcase the best of this beautiful island nation.',
+                'content' => 'Welcome to Mirissawaves, your gateway to experiencing the incredible beauty and rich culture of Sri Lanka. We are passionate about providing unforgettable travel experiences that showcase the best of this beautiful island nation.',
                 'hero_image_url' => asset('slider/default-about.jpg'),
                 'features' => [
                     ['title' => 'Expert Guides', 'description' => 'Our experienced local guides know every hidden gem'],
@@ -42,7 +42,7 @@ class AboutController extends Controller
                     [
                         'name' => 'Rajesh Perera',
                         'position' => 'Founder & CEO',
-                        'description' => 'A native of Kandy with over 15 years of experience in tourism, Rajesh founded Ceylon Mirissa to share his love for Sri Lanka\'s cultural heritage.',
+                        'description' => 'A native of Kandy with over 15 years of experience in tourism, Rajesh founded Mirissawaves to share his love for Sri Lanka\'s cultural heritage.',
                         'image_url' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
                     ],
                     [

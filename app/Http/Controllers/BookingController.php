@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
 use App\Models\User;
+use App\Services\BookingNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -61,7 +62,10 @@ class BookingController extends Controller
                     'total_amount' => $package->price * $request->travelers,
                     'status' => 'pending',
                     'payment_status' => 'pending',
+                    'booking_type' => 'package',
                 ]);
+
+                app(BookingNotificationService::class)->afterBookingCreated($booking);
 
                 if ($request->ajax()) {
                     return response()->json([
@@ -130,7 +134,10 @@ class BookingController extends Controller
                     'total_amount' => $package->price * $request->travelers,
                     'status' => 'pending',
                     'payment_status' => 'pending',
+                    'booking_type' => 'package',
                 ]);
+
+                app(BookingNotificationService::class)->afterBookingCreated($booking);
 
                 // Auto-login the newly created user
                 Auth::login($user);

@@ -112,7 +112,7 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking ID</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Package</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Travel Date</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Travelers</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
@@ -135,14 +135,26 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">{{ $booking->package->title }}</div>
-                        <div class="text-sm text-gray-500">{{ $booking->package->category->name }}</div>
+                        @if($booking->package)
+                            <div class="text-sm font-medium text-gray-900">{{ $booking->package->title }}</div>
+                            <div class="text-sm text-gray-500">{{ $booking->package->category?->name ?? 'Package' }}</div>
+                        @elseif($booking->vehicle)
+                            <div class="text-sm font-medium text-gray-900">{{ $booking->vehicle->name }}</div>
+                            <div class="text-sm text-gray-500">Vehicle
+                                @if($booking->pickupLocation && $booking->destinationLocation)
+                                    · {{ $booking->pickupLocation->name }} → {{ $booking->destinationLocation->name }}
+                                @endif
+                            </div>
+                        @else
+                            <div class="text-sm text-gray-500">—</div>
+                        @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {{ $booking->travel_date->format('M d, Y') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {{ $booking->travelers }} {{ $booking->travelers == 1 ? 'Person' : 'People' }}
+                        @php $guestCount = $booking->passengers ?? $booking->travelers ?? 1; @endphp
+                        {{ $guestCount }} {{ $guestCount == 1 ? 'Person' : 'People' }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ $booking->formatted_amount }}

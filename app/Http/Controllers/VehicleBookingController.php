@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\Location;
 use App\Models\Booking;
 use App\Models\User;
+use App\Services\BookingNotificationService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -26,58 +27,9 @@ class VehicleBookingController extends Controller
         ]);
 
         $vehicle = Vehicle::findOrFail($request->vehicle_id);
-        $distance = $request->distance; // Distance in kilometers
+        $distance = (float) $request->distance;
 
-        $totalPrice = 0;
-        $priceBreakdown = [];
-
-        // Determine effective pricing type based on available pricing data
-        $effectivePricingType = $this->getEffectivePricingType($vehicle);
-        
-        if ($effectivePricingType === 'standard') {
-            // Standard pricing: per km
-            $totalPrice = $distance * $vehicle->per_km_price;
-            $priceBreakdown = [
-                'type' => 'standard',
-                'distance_km' => $distance,
-                'per_km_price' => $vehicle->per_km_price,
-                'total' => $totalPrice
-            ];
-        } else {
-            // First KM + Per 100m pricing
-            $firstKmPrice = $vehicle->price_first_km;
-            $per100mPrice = $vehicle->price_per_100m_after;
-            
-            if ($distance <= 1) {
-                // Distance is 1km or less
-                $totalPrice = $firstKmPrice;
-                $priceBreakdown = [
-                    'type' => 'first_km_meter',
-                    'distance_km' => $distance,
-                    'first_km_price' => $firstKmPrice,
-                    'additional_distance' => 0,
-                    'additional_price' => 0,
-                    'total' => $totalPrice
-                ];
-            } else {
-                // Distance is more than 1km
-                $additionalDistance = $distance - 1; // Distance after first km
-                $additionalDistanceMeters = $additionalDistance * 1000; // Convert to meters
-                $additionalPrice = ceil($additionalDistanceMeters / 100) * $per100mPrice; // Round up to nearest 100m
-                
-                $totalPrice = $firstKmPrice + $additionalPrice;
-                $priceBreakdown = [
-                    'type' => 'first_km_meter',
-                    'distance_km' => $distance,
-                    'first_km_price' => $firstKmPrice,
-                    'additional_distance' => $additionalDistance,
-                    'additional_distance_meters' => $additionalDistanceMeters,
-                    'per_100m_price' => $per100mPrice,
-                    'additional_price' => $additionalPrice,
-                    'total' => $totalPrice
-                ];
-            }
-        }
+        [$totalPrice, $priceBreakdown, $effectivePricingType] = $this->computeRouteQuote($vehicle, $distance);
 
         // Get location names for response
         $pickupLocation = Location::findOrFail($request->pickup_location_id);
@@ -87,7 +39,7 @@ class VehicleBookingController extends Controller
             'success' => true,
             'data' => [
                 'total_price' => round($totalPrice, 2),
-                'formatted_price' => 'LKR ' . number_format($totalPrice, 2),
+                'formatted_price' => '$' . number_format($totalPrice, 2),
                 'distance' => round($distance, 2),
                 'vehicle_name' => $vehicle->name,
                 'vehicle_type' => ucfirst(str_replace('_', ' ', $vehicle->type)),
@@ -98,6 +50,234 @@ class VehicleBookingController extends Controller
                 'route_description' => $pickupLocation->name . ' → ' . $destinationLocation->name
             ]
         ]);
+    }
+
+    /**
+     * Vehicle selection page after "Plan My Journey" on the homepage.
+     */
+    public function showVehicleResults(Request $request)
+    {
+        $validated = $request->validate([
+            'pickup_location_id' => 'required|exists:locations,id',
+            'destination_location_id' => 'required|exists:locations,id',
+            'distance' => 'required|numeric|min:0.01',
+            'pickup_date' => 'required|date',
+            'pickup_time' => 'required|string|max:20',
+        ]);
+
+        $pickupLocation = Location::findOrFail($validated['pickup_location_id']);
+        $destinationLocation = Location::findOrFail($validated['destination_location_id']);
+
+        if ((int) $pickupLocation->id === (int) $destinationLocation->id) {
+            return redirect()
+                ->to(url('/') . '#booking')
+                ->with('booking_error', 'Pickup and destination must be different locations.');
+        }
+
+        $distance = (float) $validated['distance'];
+        $offerData = $this->buildVehicleOffersForRoute($pickupLocation, $destinationLocation, $distance);
+        $vehicles = $offerData['vehicles'];
+
+        return view('vehicle-booking.results', [
+            'pickupLocation' => $pickupLocation,
+            'destinationLocation' => $destinationLocation,
+            'distanceKm' => $offerData['distance_km'],
+            'pickupDate' => $validated['pickup_date'],
+            'pickupTime' => $validated['pickup_time'],
+            'vehicles' => $vehicles,
+            'filterOptions' => $this->buildVehicleFilterOptions($vehicles),
+        ]);
+    }
+
+    /**
+     * Build distinct filter values from the current vehicle offer list.
+     *
+     * @param  array<int, array<string, mixed>>  $vehicles
+     * @return array<string, mixed>
+     */
+    private function buildVehicleFilterOptions(array $vehicles): array
+    {
+        $types = [];
+        $features = [];
+        $amenities = [];
+        $fuelTypes = [];
+        $paxCounts = [];
+
+        foreach ($vehicles as $vehicle) {
+            $type = $vehicle['type'] ?? '';
+            if ($type !== '' && ! isset($types[$type])) {
+                $types[$type] = $vehicle['type_display'] ?? ucfirst(str_replace('_', ' ', $type));
+            }
+
+            foreach ($vehicle['features'] ?? [] as $feature) {
+                if (is_string($feature) && $feature !== '') {
+                    $features[$feature] = true;
+                }
+            }
+
+            foreach ($vehicle['amenities'] ?? [] as $amenity) {
+                if (is_string($amenity) && $amenity !== '') {
+                    $amenities[$amenity] = true;
+                }
+            }
+
+            if (! empty($vehicle['fuel_type'])) {
+                $fuelTypes[$vehicle['fuel_type']] = true;
+            }
+
+            $paxCounts[] = (int) ($vehicle['pax_count'] ?? 0);
+        }
+
+        ksort($types);
+        ksort($features);
+        ksort($amenities);
+        ksort($fuelTypes);
+
+        $paxMin = $paxCounts !== [] ? min($paxCounts) : 1;
+        $paxMax = $paxCounts !== [] ? max($paxCounts) : 20;
+
+        return [
+            'types' => $types,
+            'features' => array_keys($features),
+            'amenities' => array_keys($amenities),
+            'fuel_types' => array_keys($fuelTypes),
+            'pax_min' => $paxMin,
+            'pax_max' => $paxMax,
+        ];
+    }
+
+    /**
+     * Return pricing for every active vehicle along a route (kilometers).
+     */
+    public function calculateAllVehiclePrices(Request $request)
+    {
+        $request->validate([
+            'pickup_location_id' => 'required|exists:locations,id',
+            'destination_location_id' => 'required|exists:locations,id',
+            'distance' => 'required|numeric|min:0',
+        ]);
+
+        $distance = (float) $request->distance;
+        $pickupLocation = Location::findOrFail($request->pickup_location_id);
+        $destinationLocation = Location::findOrFail($request->destination_location_id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $this->buildVehicleOffersForRoute($pickupLocation, $destinationLocation, $distance),
+        ]);
+    }
+
+    /**
+     * @return array{distance_km: float, pickup_location: string, destination_location: string, vehicles: array<int, array>}
+     */
+    private function buildVehicleOffersForRoute(Location $pickupLocation, Location $destinationLocation, float $distance): array
+    {
+        $vehicles = Vehicle::active()
+            ->with('media')
+            ->orderBy('name')
+            ->get();
+
+        $items = [];
+
+        foreach ($vehicles as $vehicle) {
+            [$totalPrice, $priceBreakdown, $effectivePricingType] = $this->computeRouteQuote($vehicle, $distance);
+
+            $paxCount = (int) $vehicle->pax_count;
+            $seatCount = (int) ($vehicle->passenger_count ?: $vehicle->pax_count);
+
+            $perKm = (float) ($vehicle->per_km_price ?? 0);
+            $firstKm = (float) ($vehicle->price_first_km ?? 0);
+            $per100m = (float) ($vehicle->price_per_100m_after ?? 0);
+
+            $items[] = [
+                'id' => $vehicle->id,
+                'name' => $vehicle->name,
+                'type' => $vehicle->type,
+                'type_display' => ucfirst(str_replace('_', ' ', $vehicle->type)),
+                'pax_count' => $paxCount,
+                'passenger_count' => $seatCount,
+                'description' => $vehicle->description,
+                'brand' => $vehicle->brand,
+                'model' => $vehicle->model,
+                'fuel_type' => $vehicle->fuel_type,
+                'features' => array_values(array_filter((array) ($vehicle->features ?? []))),
+                'amenities' => array_values(array_filter((array) ($vehicle->amenities ?? []))),
+                'image_url' => $vehicle->image_url,
+                'driver_name' => $vehicle->driver_name,
+                'driver_phone' => $vehicle->driver_phone,
+                'driver_license_number' => $vehicle->driver_license_number,
+                'total_price' => round($totalPrice, 2),
+                'formatted_price' => '$' . number_format($totalPrice, 2),
+                'pricing_type' => $effectivePricingType,
+                'per_km_price' => $perKm,
+                'formatted_per_km' => $perKm > 0 ? '$' . number_format($perKm, 2) : null,
+                'price_first_km' => $firstKm,
+                'formatted_price_first_km' => $firstKm > 0 ? '$' . number_format($firstKm, 2) : null,
+                'price_per_100m_after' => $per100m,
+                'formatted_price_per_100m' => $per100m > 0 ? '$' . number_format($per100m, 2) : null,
+                'price_breakdown' => $this->formatPriceBreakdown($priceBreakdown),
+            ];
+        }
+
+        return [
+            'distance_km' => round($distance, 2),
+            'pickup_location' => $pickupLocation->name,
+            'destination_location' => $destinationLocation->name,
+            'vehicles' => $items,
+        ];
+    }
+
+    /**
+     * @return array{0: float, 1: array, 2: string}
+     */
+    private function computeRouteQuote(Vehicle $vehicle, float $distance): array
+    {
+        $effectivePricingType = $this->getEffectivePricingType($vehicle);
+        $totalPrice = 0.0;
+        $priceBreakdown = [];
+
+        if ($effectivePricingType === 'standard') {
+            $perKm = (float) $vehicle->per_km_price;
+            $totalPrice = $distance * $perKm;
+            $priceBreakdown = [
+                'type' => 'standard',
+                'distance_km' => $distance,
+                'per_km_price' => $vehicle->per_km_price,
+                'total' => $totalPrice,
+            ];
+        } else {
+            $firstKmPrice = (float) $vehicle->price_first_km;
+            $per100mPrice = (float) $vehicle->price_per_100m_after;
+
+            if ($distance <= 1) {
+                $totalPrice = $firstKmPrice;
+                $priceBreakdown = [
+                    'type' => 'first_km_meter',
+                    'distance_km' => $distance,
+                    'first_km_price' => $firstKmPrice,
+                    'additional_distance' => 0,
+                    'additional_price' => 0,
+                    'total' => $totalPrice,
+                ];
+            } else {
+                $additionalDistance = $distance - 1;
+                $additionalDistanceMeters = $additionalDistance * 1000;
+                $additionalPrice = ceil($additionalDistanceMeters / 100) * $per100mPrice;
+                $totalPrice = $firstKmPrice + $additionalPrice;
+                $priceBreakdown = [
+                    'type' => 'first_km_meter',
+                    'distance_km' => $distance,
+                    'first_km_price' => $firstKmPrice,
+                    'additional_distance' => $additionalDistance,
+                    'additional_distance_meters' => $additionalDistanceMeters,
+                    'per_100m_price' => $per100mPrice,
+                    'additional_price' => $additionalPrice,
+                    'total' => $totalPrice,
+                ];
+            }
+        }
+
+        return [$totalPrice, $priceBreakdown, $effectivePricingType];
     }
 
     /**
@@ -128,12 +308,12 @@ class VehicleBookingController extends Controller
         $formatted = [];
         
         if ($priceBreakdown['type'] === 'standard') {
-            $formatted[] = "Per km rate: LKR " . number_format($priceBreakdown['per_km_price'] ?? 0, 2);
+            $formatted[] = "Per km rate: $" . number_format($priceBreakdown['per_km_price'] ?? 0, 2);
             $formatted[] = "Distance: " . number_format($priceBreakdown['distance_km'], 2) . "km";
         } else {
-            $formatted[] = "First 1km: LKR " . number_format($priceBreakdown['first_km_price'] ?? 0, 2);
+            $formatted[] = "First 1km: $" . number_format($priceBreakdown['first_km_price'] ?? 0, 2);
             if (($priceBreakdown['additional_distance'] ?? 0) > 0) {
-                $formatted[] = "Additional " . number_format($priceBreakdown['additional_distance'], 2) . "km: LKR " . number_format($priceBreakdown['additional_price'] ?? 0, 2);
+                $formatted[] = "Additional " . number_format($priceBreakdown['additional_distance'], 2) . "km: $" . number_format($priceBreakdown['additional_price'] ?? 0, 2);
             }
         }
         
@@ -206,8 +386,10 @@ class VehicleBookingController extends Controller
                 'special_requirements' => $request->special_requirements,
                 'status' => 'pending',
                 'payment_status' => 'pending',
-                'booking_type' => 'vehicle' // Mark as vehicle booking
+                'booking_type' => 'vehicle',
             ]);
+
+            app(BookingNotificationService::class)->afterBookingCreated($booking);
 
             // Auto-login the user
             Auth::login($user);
@@ -252,7 +434,7 @@ class VehicleBookingController extends Controller
                 'passengers' => $booking->travelers,
                 'distance' => $booking->distance,
                 'total_amount' => $booking->total_amount,
-                'formatted_price' => 'LKR ' . number_format($booking->total_amount, 2),
+                'formatted_price' => '$' . number_format($booking->total_amount, 2),
                 'full_name' => $booking->full_name,
                 'email' => $booking->email,
                 'phone' => $booking->phone,
@@ -283,7 +465,8 @@ class VehicleBookingController extends Controller
                 'customerDetails.email' => 'required|email|max:255',
                 'customerDetails.phone' => 'required|string|max:20',
                 'customerDetails.password' => 'nullable|string|min:6',
-                'customerDetails.specialRequirements' => 'nullable|string'
+                'customerDetails.specialRequirements' => 'nullable|string',
+                'distance_km' => 'nullable|numeric|min:0',
             ]);
 
             // Check if user is authenticated
@@ -337,35 +520,24 @@ class VehicleBookingController extends Controller
             
             // Get vehicle
             $vehicle = Vehicle::findOrFail($request->vehicleId);
-            
-            // Calculate distance (you might want to calculate this based on coordinates)
-            // For now, we'll use a default value or calculate from locations
-            $distance = $this->calculateDistance(
-                $pickupLocation->latitude,
-                $pickupLocation->longitude,
-                $destinationLocation->latitude,
-                $destinationLocation->longitude
-            );
-            
-            // Calculate total price
-            $totalPrice = 0;
-            $effectivePricingType = $this->getEffectivePricingType($vehicle);
-            
-            if ($effectivePricingType === 'standard') {
-                $totalPrice = $distance * $vehicle->per_km_price;
-            } else {
-                $firstKmPrice = $vehicle->price_first_km;
-                $per100mPrice = $vehicle->price_per_100m_after;
-                
-                if ($distance <= 1) {
-                    $totalPrice = $firstKmPrice;
-                } else {
-                    $additionalDistance = $distance - 1;
-                    $additionalDistanceMeters = $additionalDistance * 1000;
-                    $additionalPrice = ceil($additionalDistanceMeters / 100) * $per100mPrice;
-                    $totalPrice = $firstKmPrice + $additionalPrice;
-                }
+
+            if ($request->passengers > $vehicle->pax_count) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Maximum {$vehicle->pax_count} passengers allowed for selected vehicle",
+                ], 422);
             }
+
+            $distance = $request->filled('distance_km') && is_numeric($request->distance_km)
+                ? (float) $request->distance_km
+                : $this->calculateDistance(
+                    $pickupLocation->latitude,
+                    $pickupLocation->longitude,
+                    $destinationLocation->latitude,
+                    $destinationLocation->longitude
+                );
+
+            [$totalPrice, , ] = $this->computeRouteQuote($vehicle, $distance);
 
             // Create booking
             $booking = Booking::create([
@@ -373,10 +545,9 @@ class VehicleBookingController extends Controller
                 'vehicle_id' => $vehicle->id,
                 'pickup_location_id' => $pickupLocation->id,
                 'destination_location_id' => $destinationLocation->id,
-                'pickup_date' => $request->pickupDate,
                 'pickup_time' => $request->pickupTime,
                 'travel_date' => $request->pickupDate,
-                'passengers' => $request->passengers,
+                'travelers' => $request->passengers,
                 'full_name' => $request->customerDetails['fullName'],
                 'email' => $request->customerDetails['email'],
                 'phone' => $request->customerDetails['phone'],
@@ -385,8 +556,10 @@ class VehicleBookingController extends Controller
                 'special_requirements' => $request->customerDetails['specialRequirements'] ?? null,
                 'status' => 'pending',
                 'payment_status' => 'pending',
-                'booking_type' => 'vehicle'
+                'booking_type' => 'vehicle',
             ]);
+
+            app(BookingNotificationService::class)->afterBookingCreated($booking);
 
             Log::info('Booking created successfully', [
                 'booking_id' => $booking->id,
@@ -405,7 +578,7 @@ class VehicleBookingController extends Controller
                     'id' => $booking->id,
                     'reference_number' => 'BK-' . str_pad($booking->id, 6, '0', STR_PAD_LEFT),
                     'total_amount' => round($totalPrice, 2),
-                    'formatted_price' => 'LKR ' . number_format($totalPrice, 2)
+                    'formatted_price' => '$' . number_format($totalPrice, 2)
                 ],
                 'payment_url' => $paymentUrl
             ]);

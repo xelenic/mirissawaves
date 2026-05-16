@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\LocationController as AdminLocationController;
 use App\Http\Controllers\Admin\LocationVehiclePriceController as AdminLocationVehiclePriceController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\SocialMediaController;
 use App\Http\Controllers\Admin\AboutController as AdminAboutController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PayHereController;
@@ -23,6 +24,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/packages', [HomeController::class, 'packages'])->name('packages');
 Route::get('/package/{slug}', [HomeController::class, 'packageDetails'])->name('package.details');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
 // Price calculation API
 Route::post('/api/calculate-price', [HomeController::class, 'calculatePrice'])->name('api.calculate-price');
@@ -44,8 +46,11 @@ Route::get('/api/check-user', [HomeController::class, 'checkUser'])->name('api.c
 
 // Vehicle Booking Routes
 Route::prefix('vehicle-booking')->group(function () {
+    Route::get('/vehicles', [App\Http\Controllers\VehicleBookingController::class, 'showVehicleResults'])->name('vehicle.booking.vehicles');
     Route::get('/calculate-price', [App\Http\Controllers\VehicleBookingController::class, 'calculatePrice'])->name('vehicle.booking.calculate-price');
     Route::post('/calculate-price', [App\Http\Controllers\VehicleBookingController::class, 'calculatePrice'])->name('vehicle.booking.calculate-price.post');
+    Route::get('/calculate-all-prices', [App\Http\Controllers\VehicleBookingController::class, 'calculateAllVehiclePrices'])->name('vehicle.booking.calculate-all-prices');
+    Route::post('/calculate-all-prices', [App\Http\Controllers\VehicleBookingController::class, 'calculateAllVehiclePrices'])->name('vehicle.booking.calculate-all-prices.post');
     Route::post('/create', [App\Http\Controllers\VehicleBookingController::class, 'createBooking'])->name('vehicle.booking.create');
     Route::post('/submit', [App\Http\Controllers\VehicleBookingController::class, 'submit'])->name('vehicle.booking.submit');
     Route::get('/details/{bookingId}', [App\Http\Controllers\VehicleBookingController::class, 'getBookingDetails'])->name('vehicle.booking.details');
@@ -58,6 +63,7 @@ Route::match(['get', 'post'], '/payhere/cancel', [PayHereController::class, 'han
 Route::post('/payhere/notify', [PayHereController::class, 'handleNotify'])->name('payhere.notify');
 Route::get('/booking/{bookingId}/success', [PayHereController::class, 'showSuccess'])->name('booking.success');
 Route::get('/booking/{bookingId}/failed', [PayHereController::class, 'showFailed'])->name('booking.failed');
+Route::get('/booking/{bookingId}/receipt', [PayHereController::class, 'printReceipt'])->name('booking.receipt');
 
 // My Bookings Routes (User Panel)
 Route::middleware('auth')->group(function () {
@@ -112,6 +118,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     // Blog Management
     Route::get('/blog', [AdminBlogController::class, 'index'])->name('admin.blog.index');
     Route::get('/blog/create', [AdminBlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/blog/generate-article', [AdminBlogController::class, 'generateArticle'])->name('admin.blog.generate-article');
     Route::post('/blog', [AdminBlogController::class, 'store'])->name('admin.blog.store');
     Route::get('/blog/{blog}/edit', [AdminBlogController::class, 'edit'])->name('admin.blog.edit');
     Route::put('/blog/{blog}', [AdminBlogController::class, 'update'])->name('admin.blog.update');
@@ -128,6 +135,10 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/reviews/{review}/toggle-approval', [AdminReviewController::class, 'toggleApproval'])->name('admin.reviews.toggle-approval');
     Route::patch('/reviews/{review}/toggle-featured', [AdminReviewController::class, 'toggleFeatured'])->name('admin.reviews.toggle-featured');
     
+    // Social media links (homepage sidebar)
+    Route::get('/social-media', [SocialMediaController::class, 'index'])->name('admin.social-media.index');
+    Route::put('/social-media', [SocialMediaController::class, 'update'])->name('admin.social-media.update');
+
     // Settings Management
     Route::get('/settings', [SettingsController::class, 'index'])->name('admin.settings.index');
     Route::put('/settings', [SettingsController::class, 'update'])->name('admin.settings.update');
@@ -199,4 +210,15 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
         'destroy' => 'admin.location-vehicle-prices.destroy',
     ]);
     Route::patch('/location-vehicle-prices/{locationVehiclePrice}/toggle-status', [AdminLocationVehiclePriceController::class, 'toggleStatus'])->name('admin.location-vehicle-prices.toggle-status');
+
+    // Startup promo popup
+    Route::get('/promo-popup', [\App\Http\Controllers\Admin\PromoPopupController::class, 'index'])->name('admin.promo-popup.index');
+    Route::get('/promo-popup/create', [\App\Http\Controllers\Admin\PromoPopupController::class, 'create'])->name('admin.promo-popup.create');
+    Route::post('/promo-popup', [\App\Http\Controllers\Admin\PromoPopupController::class, 'store'])->name('admin.promo-popup.store');
+    Route::post('/promo-popup/generate-banner', [\App\Http\Controllers\Admin\PromoPopupController::class, 'generateBanner'])->name('admin.promo-popup.generate-banner');
+    Route::put('/promo-popup/settings', [\App\Http\Controllers\Admin\PromoPopupController::class, 'updateSettings'])->name('admin.promo-popup.settings');
+    Route::get('/promo-popup/{slide}/edit', [\App\Http\Controllers\Admin\PromoPopupController::class, 'edit'])->name('admin.promo-popup.edit');
+    Route::put('/promo-popup/{slide}', [\App\Http\Controllers\Admin\PromoPopupController::class, 'update'])->name('admin.promo-popup.update');
+    Route::delete('/promo-popup/{slide}', [\App\Http\Controllers\Admin\PromoPopupController::class, 'destroy'])->name('admin.promo-popup.destroy');
+    Route::patch('/promo-popup/{slide}/toggle-status', [\App\Http\Controllers\Admin\PromoPopupController::class, 'toggleStatus'])->name('admin.promo-popup.toggle-status');
 });

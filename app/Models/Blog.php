@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ImagePlaceholder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
@@ -138,17 +139,23 @@ class Blog extends Model
     /**
      * Get the featured image URL.
      */
-    public function getFeaturedImageUrlAttribute()
+    public function getFeaturedImageUrlAttribute(): string
     {
-        if ($this->featured_image) {
-            // Check if the image path starts with 'slider/' (static images)
-            if (str_starts_with($this->featured_image, 'slider/')) {
-                return asset($this->featured_image);
-            }
-            // Otherwise, it's a stored image in the storage directory
-            return asset('storage/' . $this->featured_image);
+        if ($this->media && ImagePlaceholder::storagePathExists($this->media->path)) {
+            return $this->media->url;
         }
-        return asset('slider/default-blog.jpg');
+
+        if ($this->featured_image) {
+            if (str_starts_with($this->featured_image, 'slider/')) {
+                if (ImagePlaceholder::publicPathExists($this->featured_image)) {
+                    return asset($this->featured_image);
+                }
+            } elseif (ImagePlaceholder::storagePathExists($this->featured_image)) {
+                return asset('storage/' . $this->featured_image);
+            }
+        }
+
+        return ImagePlaceholder::url('blog');
     }
 
     /**

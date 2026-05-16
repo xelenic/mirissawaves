@@ -1,19 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Register - Ceylon Mirissa')
-@section('description', 'Create your Ceylon Mirissa account to access exclusive features, manage bookings, and get personalized travel recommendations.')
+@section('title', 'Register - Mirissawaves')
+@section('description', 'Create your Mirissawaves account to access exclusive features, manage bookings, and get personalized travel recommendations.')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="auth-page min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
         <!-- Header -->
         <div class="text-center">
-            <div class="mx-auto h-16 w-16 bg-gradient-to-br from-green-500 to-blue-500 rounded-full flex items-center justify-center mb-4">
-                <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                </svg>
+            <div class="flex justify-center mb-4">
+                <x-site-logo href="{{ route('home') }}" height="4rem" />
             </div>
-            <h2 class="text-3xl font-bold text-gray-900 playfair">Join Ceylon Mirissa</h2>
+            <h2 class="text-3xl font-bold text-gray-900 playfair">Join Mirissawaves</h2>
             <p class="mt-2 text-sm text-gray-600">Create your account and start your Sri Lankan adventure</p>
         </div>
 
@@ -94,37 +92,6 @@
                     @error('password')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
-                        Confirm Password
-                    </label>
-                    <div class="relative">
-                        <input 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
-                            type="password" 
-                            autocomplete="new-password" 
-                            required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300"
-                            placeholder="Confirm your password"
-                        >
-                        <button 
-                            type="button" 
-                            onclick="togglePassword('password_confirmation')" 
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
-                        >
-                            <svg id="eye-open-password_confirmation" class="h-5 w-5 text-gray-400 hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            <svg id="eye-closed-password_confirmation" class="h-5 w-5 text-gray-400 hover:text-gray-600 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"></path>
-                            </svg>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Terms and Conditions -->
